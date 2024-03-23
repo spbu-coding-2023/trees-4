@@ -1,0 +1,8 @@
+### Gradle ###
+.gradle
+build
+build.gradle.kts
+gradle.properties
+
+### IntelliJ IDEA ###
+.idea
