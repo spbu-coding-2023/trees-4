@@ -14,8 +14,8 @@ class RBTree<K: Comparable<K>> {
 
         var curNode = root
         while (curNode != null) {
-            when {
-                addNode > curNode -> {
+            when (addNode.compareTo(curNode)) {
+                +1 -> {
                     if (curNode.right == null) {
                         curNode.right = addNode
                         return true
@@ -23,7 +23,8 @@ class RBTree<K: Comparable<K>> {
                         curNode = curNode.right
                     }
                 }
-                addNode < curNode -> {
+                +0 -> return false
+                -1 -> {
                     if (curNode.left == null) {
                         curNode.left = addNode
                         return true
@@ -31,7 +32,6 @@ class RBTree<K: Comparable<K>> {
                         curNode = curNode.left
                     }
                 }
-                addNode == curNode -> return false
             }
         }
 
