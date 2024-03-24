@@ -38,5 +38,16 @@ class RBTree<K: Comparable<K>> {
         return false
     }
 
+    fun max(): K? {
+        var maxNode = root
+        while (maxNode?.right != null) maxNode = maxNode.right
+        return maxNode?.key
+    }
+
+    fun min(): K? {
+        var minNode = root
+        while (minNode?.left != null) minNode = minNode.left
+        return minNode?.key
+    }
 
 }
