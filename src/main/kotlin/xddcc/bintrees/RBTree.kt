@@ -50,4 +50,8 @@ class RBTree<K: Comparable<K>> {
         return minNode?.key
     }
 
+    fun root(): K? = root?.key
+
+    fun clear(): Unit { root = null }
+
 }
