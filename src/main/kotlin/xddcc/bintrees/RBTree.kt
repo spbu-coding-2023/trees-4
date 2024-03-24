@@ -38,6 +38,33 @@ class RBTree<K: Comparable<K>> {
         return false
     }
 
+    fun remove(key: K): Boolean {
+        var prevNode: RBNode<K>? = null
+        var removeNode = root
+        while (removeNode != null) {
+            when (key.compareTo(removeNode.key)){
+                +1  -> {
+                    prevNode = removeNode
+                    removeNode = removeNode.right
+                }
+                +0  -> {
+                    if (prevNode == null) {
+                        root = null
+                    } else {
+                        TODO("correct remove")
+                    }
+                    return true
+                }
+                -1 -> {
+                    prevNode = removeNode
+                    removeNode = removeNode.left
+                }
+            }
+        }
+
+        return false
+    }
+
     fun find(key: K): Boolean {
         var curNode = root
         while (curNode != null) {
