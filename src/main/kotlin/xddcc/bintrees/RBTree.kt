@@ -38,6 +38,18 @@ class RBTree<K: Comparable<K>> {
         return false
     }
 
+    fun find(key: K): Boolean {
+        var curNode = root
+        while (curNode != null) {
+            when (key.compareTo(curNode.key)){
+                +1  -> curNode = curNode.right
+                +0  -> return true
+                -1 -> curNode = curNode.left
+            }
+        }
+        return false
+    }
+
     fun max(): K? {
         var maxNode = root
         while (maxNode?.right != null) maxNode = maxNode.right
