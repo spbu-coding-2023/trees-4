@@ -6,35 +6,82 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
     private var root: RBNode<K>? = null
 
     fun add(key: K) {
-        val (uncle, dad, son) = addHelper(key)
-
-        when {
-            dad == null -> root = RBNode(key)
-            son != null -> return   //Node already exist
-            son == null -> if (dad.right == null) dad.right = RBNode(key) else dad.left = RBNode(key)
-        }
-    }
-
-    private fun addHelper(key: K): Triple<RBNode<K>?, RBNode<K>?, RBNode<K>?> {
-        var (uncle, dad, son) =
-            Triple<RBNode<K>?, RBNode<K>?, RBNode<K>?>(null, null, root)
-        while (son != null) {
-            val keyCompare = key.compareTo(son.key)
-            when {
-                keyCompare > 0 -> {
-                    uncle = dad
-                    dad = son
-                    son = son.left
+        val treeBranch = ArrayDeque<RBNode<K>>()
+        val newNode = RBNode(key)
+        if (root == null) {
+            root = newNode
+        } else {
+            var curNode = root
+            while (curNode != null) {
+                treeBranch.addFirst(curNode)
+                when {
+                    newNode > curNode -> curNode = curNode.right
+                    newNode < curNode -> curNode = curNode.left
+                    else -> TODO("private fun replace(father, new)")
                 }
-                keyCompare < 0 -> {
-                    uncle = dad
-                    dad = son
-                    son = son.right
-                }
-                else -> return Triple(uncle, dad, son)
+            }
+            val father = treeBranch.first()
+            if (newNode > father) {
+                father.right = newNode
+            } else {
+                father.left = newNode
             }
         }
-        return Triple(uncle, dad, son)
+
+        balanceAdd(treeBranch)
+    }
+
+    private fun balanceAdd(treeBranch: ArrayDeque<RBNode<K>>) {
+        var (son, parent, grandparent) =
+            Triple(treeBranch.removeFirst(), treeBranch.removeFirst(), treeBranch.removeFirst())
+
+        while (parent.red) {
+            if (parent === grandparent.left) {
+                val uncle = grandparent.right
+                if (uncle?.red == true) {
+                    parent.red = false
+                    uncle.red = false
+                    grandparent.red = true
+
+                    son = grandparent
+                    parent = treeBranch.removeFirst()
+                    grandparent = treeBranch.removeFirst()
+                } else {
+                    if (son === parent.right) {
+                        son = parent
+                        parent = grandparent
+                        grandparent = treeBranch.removeFirst()
+                        TODO("leftRotate(son)")
+                    }
+                    parent.red = false
+                    grandparent.red = true
+                    TODO("rightRotate(grandfather)")
+                }
+            } else if (parent == grandparent.right){
+                val uncle = grandparent.left
+                if (uncle?.red == true) {
+                    parent.red = false
+                    uncle.red = false
+                    grandparent.red = true
+
+                    son = grandparent
+                    parent = treeBranch.removeFirst()
+                    grandparent = treeBranch.removeFirst()
+                } else {
+                    if (son === parent.left) {
+                        son = parent
+                        parent = grandparent
+                        grandparent = treeBranch.removeFirst()
+                        TODO("rightRotate(son)")
+                    }
+                    parent.red = false
+                    grandparent.red = true
+                    TODO("leftRotate(grandfather)")
+                }
+            }
+        }
+
+        root?.red = false
     }
 
     fun remove(key: K): Boolean {
