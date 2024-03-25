@@ -5,37 +5,36 @@ import xddcc.nodes.RBNode
 class RBTree<K: Comparable<K>>: Iterable<K> {
     private var root: RBNode<K>? = null
 
-    fun add(key: K): Boolean {
-        val addNode = RBNode(key)
-        if (root == null) {
-            root = addNode
-            return true
-        }
+    fun add(key: K) {
+        val (uncle, dad, son) = addHelper(key)
 
-        var curNode = root
-        while (curNode != null) {
-            when (addNode.compareTo(curNode)) {
-                +1 -> {
-                    if (curNode.right == null) {
-                        curNode.right = addNode
-                        return true
-                    } else {
-                        curNode = curNode.right
-                    }
+        when {
+            dad == null -> root = RBNode(key)
+            son != null -> return   //Node already exist
+            son == null -> if (dad.right == null) dad.right = RBNode(key) else dad.left = RBNode(key)
+        }
+    }
+
+    private fun addHelper(key: K): Triple<RBNode<K>?, RBNode<K>?, RBNode<K>?> {
+        var (uncle, dad, son) =
+            Triple<RBNode<K>?, RBNode<K>?, RBNode<K>?>(null, null, root)
+        while (son != null) {
+            val keyCompare = key.compareTo(son.key)
+            when {
+                keyCompare > 0 -> {
+                    uncle = dad
+                    dad = son
+                    son = son.left
                 }
-                +0 -> return false
-                -1 -> {
-                    if (curNode.left == null) {
-                        curNode.left = addNode
-                        return true
-                    } else {
-                        curNode = curNode.left
-                    }
+                keyCompare < 0 -> {
+                    uncle = dad
+                    dad = son
+                    son = son.right
                 }
+                else -> return Triple(uncle, dad, son)
             }
         }
-
-        return false
+        return Triple(uncle, dad, son)
     }
 
     fun remove(key: K): Boolean {
