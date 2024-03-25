@@ -14,20 +14,20 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
             var curNode = root
             while (curNode != null) {
                 treeBranch.addFirst(curNode)
-                when {
-                    newNode > curNode -> curNode = curNode.right
-                    newNode < curNode -> curNode = curNode.left
-                    else -> TODO("private fun replace(father, new)")
+                curNode = when {
+                    newNode > curNode -> curNode.right
+                    newNode < curNode -> curNode.left
+                    else -> curNode   //endless loop for equal keys
                 }
             }
-            val father = treeBranch.first()
-            if (newNode > father) {
-                father.right = newNode
+            val parent = treeBranch.first()
+            if (newNode > parent) {
+                parent.right = newNode
             } else {
-                father.left = newNode
+                parent.left = newNode
             }
+            treeBranch.addFirst(newNode)
         }
-
         balanceAdd(treeBranch)
     }
 
@@ -93,11 +93,14 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
         node.left = nodeLeft?.right
         nodeLeft?.right = node
 
-        if (parent != null)
+        if (parent != null) {
             if (node > parent)
                 parent.right = nodeLeft
             else
                 parent.left = nodeLeft
+        } else /* node == root */ {
+            root = nodeLeft
+        }
     }
 
     private fun rotateLeft(node: RBNode<K>, parent: RBNode<K>?) {
@@ -105,11 +108,14 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
         node.right = nodeRight?.left
         nodeRight?.left = node
 
-        if (parent != null)
+        if (parent != null) {
             if (node > parent)
                 parent.right = nodeRight
             else
                 parent.left = nodeRight
+        } else /* node == root */ {
+            root = nodeRight
+        }
     }
 
     fun remove(key: K): Boolean {
