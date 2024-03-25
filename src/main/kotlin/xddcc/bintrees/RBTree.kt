@@ -2,7 +2,7 @@ package xddcc.bintrees
 
 import xddcc.nodes.RBNode
 
-class RBTree<K: Comparable<K>> {
+class RBTree<K: Comparable<K>>: Iterable<K> {
     private var root: RBNode<K>? = null
 
     fun add(key: K): Boolean {
@@ -92,5 +92,7 @@ class RBTree<K: Comparable<K>> {
     fun root(): K? = root?.key
 
     fun clear(): Unit { root = null }
+
+    override fun iterator(): Iterator<K> = TreeIterator(root)
 
 }
