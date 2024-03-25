@@ -33,10 +33,10 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
 
     private fun balanceAdd(treeBranch: ArrayDeque<RBNode<K>>) {
         var (son, parent, grandparent) =
-            Triple(treeBranch.removeFirst(), treeBranch.removeFirst(), treeBranch.removeFirst())
+            Triple(treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull())
 
-        while (parent.red) {
-            if (parent === grandparent.left) {
+        while (parent?.red == true) {
+            if (parent === grandparent?.left) {
                 val uncle = grandparent.right
                 if (uncle?.red == true) {
                     parent.red = false
@@ -44,9 +44,9 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
                     grandparent.red = true
 
                     son = grandparent
-                    parent = treeBranch.removeFirst()
-                    grandparent = treeBranch.removeFirst()
-                } else {
+                    parent = treeBranch.removeFirstOrNull()
+                    grandparent = treeBranch.removeFirstOrNull()
+                } else /*uncle == null*/ {
                     if (son === parent.right) {
                         son = parent
                         parent = grandparent
@@ -57,7 +57,7 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
                     grandparent.red = true
                     TODO("rightRotate(grandfather)")
                 }
-            } else if (parent == grandparent.right){
+            } else if (parent === grandparent?.right){
                 val uncle = grandparent.left
                 if (uncle?.red == true) {
                     parent.red = false
@@ -65,19 +65,21 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
                     grandparent.red = true
 
                     son = grandparent
-                    parent = treeBranch.removeFirst()
-                    grandparent = treeBranch.removeFirst()
+                    parent = treeBranch.removeFirstOrNull()
+                    grandparent = treeBranch.removeFirstOrNull()
                 } else {
                     if (son === parent.left) {
                         son = parent
                         parent = grandparent
-                        grandparent = treeBranch.removeFirst()
+                        grandparent = treeBranch.removeFirstOrNull()
                         TODO("rightRotate(son)")
                     }
                     parent.red = false
                     grandparent.red = true
                     TODO("leftRotate(grandfather)")
                 }
+            } else /*grandparent == null*/{
+                parent.red = false
             }
         }
 
