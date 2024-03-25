@@ -1,4 +1,4 @@
-package xddcc.bintrees
+package treeLib.bintrees
 
-class BSTree {
+open class BSTree : Tree {
 }
