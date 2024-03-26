@@ -95,21 +95,4 @@ class AVLTree<K : Comparable<K>, V> : Tree<K, V, AVLNode<K, V>> {
 			println("Node.left is null.\n")
 		}
 	}
-
-	//дебаг
-	fun inorder() {
-		fun inorderRec(root: AVLNode<K, V>?) {
-			if (root != null) {
-				inorderRec(root.left)
-				println(root.key)
-				inorderRec(root.right)
-				println("-")
-			}
-		}
-		inorderRec(root)
-	}
-
-	override fun iterator(): Iterator<Pair<K, V>> {
-		TODO("Not yet implemented")
-	}
 }
