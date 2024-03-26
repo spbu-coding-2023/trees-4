@@ -23,7 +23,7 @@ class RBTree<K: Comparable<K>, V>: Iterable<K> {
                     val parent = treeBranch.first()
                     newNode.left = curNode.left
                     newNode.right = curNode.right
-                    newNode.red = curNode.red
+                    newNode.isRed = curNode.isRed
                     if (newNode > parent) {
                         parent.right = newNode
                     } else {
@@ -48,13 +48,13 @@ class RBTree<K: Comparable<K>, V>: Iterable<K> {
         var (son, parent, grandparent) =
             Triple(treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull())
 
-        while (parent != null && parent.red) {
+        while (parent != null && parent.isRed) {
             if (parent === grandparent?.left) {
                 val uncle = grandparent.right
-                if (uncle?.red == true) {
-                    parent.red = false
-                    uncle.red = false
-                    grandparent.red = true
+                if (uncle?.isRed == true) {
+                    parent.isRed = false
+                    uncle.isRed = false
+                    grandparent.isRed = true
 
                     son = grandparent
                     parent = treeBranch.removeFirstOrNull()
@@ -66,16 +66,16 @@ class RBTree<K: Comparable<K>, V>: Iterable<K> {
                         grandparent = treeBranch.removeFirst()
                         rotateLeft(son, parent)
                     }
-                    parent.red = false
-                    grandparent.red = true
+                    parent.isRed = false
+                    grandparent.isRed = true
                     rotateRight(grandparent, treeBranch.firstOrNull())
                 }
             } else if (parent === grandparent?.right){
                 val uncle = grandparent.left
-                if (uncle?.red == true) {
-                    parent.red = false
-                    uncle.red = false
-                    grandparent.red = true
+                if (uncle?.isRed == true) {
+                    parent.isRed = false
+                    uncle.isRed = false
+                    grandparent.isRed = true
 
                     son = grandparent
                     parent = treeBranch.removeFirstOrNull()
@@ -87,18 +87,18 @@ class RBTree<K: Comparable<K>, V>: Iterable<K> {
                         grandparent = treeBranch.removeFirstOrNull()
                         rotateRight(son, parent)
                     }
-                    parent.red = false
+                    parent.isRed = false
                     if (grandparent != null) {//why safe call
-                        grandparent.red = true
+                        grandparent.isRed = true
                         rotateLeft(grandparent, treeBranch.firstOrNull())
                     }
                 }
             } else /*grandparent == null*/{
-                parent.red = false
+                parent.isRed = false
             }
         }
 
-        root?.red = false
+        root?.isRed = false
     }
 
     private fun rotateRight(node: RBNode<K, V>, parent: RBNode<K, V>?) {
