@@ -1,10 +1,11 @@
 package xddcc.nodes
 
-class RBNode<K: Comparable<K>>(
+class RBNode<K: Comparable<K>, V>(
     val key: K,
+    val value: V,
     var red: Boolean = true,
-    var right: RBNode<K>? = null,
-    var left: RBNode<K>? = null,
-): Comparable<RBNode<K>> {
-    override fun compareTo(other: RBNode<K>) = this.key.compareTo(other.key)
+    var right: RBNode<K, V>? = null,
+    var left: RBNode<K, V>? = null,
+): Comparable<RBNode<K, *>> {
+    override fun compareTo(other: RBNode<K, *>) = this.key.compareTo(other.key)
 }
