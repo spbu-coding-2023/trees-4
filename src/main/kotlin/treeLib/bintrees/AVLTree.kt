@@ -68,4 +68,30 @@ class AVLTree<K : Comparable<K>, V> : BSTree<K, V>() {
 			println("Node.right is null.\n")
 		}
 	}
+
+	fun rotateRight(node: AVLNode<K, V>) {
+		if ((node.left) != null) {
+			val oldLeft = node.left
+			node.left = oldLeft?.right
+
+			if (oldLeft?.right != null){
+				(oldLeft.right)?.parent = node
+			}
+
+			oldLeft?.parent = node.parent
+			if ((node.parent) == null) {
+				root = oldLeft
+			} else if (node == (node.parent)?.right) {
+				(node.parent)?.right = oldLeft
+			} else {
+				(node.parent)?.left = oldLeft
+			}
+
+			oldLeft?.right = node
+			node.parent = oldLeft
+
+		} else {
+			println("Node.left is null.\n")
+		}
+	}
 }
