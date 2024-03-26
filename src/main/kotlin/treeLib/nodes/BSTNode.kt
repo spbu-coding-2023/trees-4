@@ -1,4 +1,4 @@
-package xddcc.nodes
+package treeLib.nodes
 
 class BSTNode {
 }

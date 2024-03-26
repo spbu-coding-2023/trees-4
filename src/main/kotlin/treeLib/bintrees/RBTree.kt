@@ -1,4 +1,5 @@
 package treeLib.bintrees
 
-class RBTree : BSTree() {
+class RBTree<K: Comparable<K>, V> : BSTree<K, V>(){
+
 }
