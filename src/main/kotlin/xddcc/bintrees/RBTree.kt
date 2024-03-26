@@ -27,35 +27,23 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
             var curNode = root
             while (curNode != null) {
                 treeBranch.addFirst(curNode)
-                val nextNode = when {
-                    newNode > curNode -> curNode.right
-                    newNode < curNode -> curNode.left
-                    else -> curNode
-                }
+                val nextNode = curNode.moveOn(key)
                 if (nextNode === curNode) {   //replace
                     val parent = treeBranch.first()
+                    parent.attach(newNode)
                     newNode.left = curNode.left
                     newNode.right = curNode.right
                     newNode.isRed = curNode.isRed
-                    if (newNode > parent) {
-                        parent.right = newNode
-                    } else {
-                        parent.left = newNode
-                    }
-                } else {
-                    curNode = nextNode
+                    return Pair(curNode.key, curNode.value)
                 }
+                curNode = nextNode
             }
             val parent = treeBranch.first()
-            if (newNode > parent) {
-                parent.right = newNode
-            } else {
-                parent.left = newNode
-            }
-            treeBranch.addFirst(newNode)
+            parent.attach(newNode)
         }
+        treeBranch.addFirst(newNode)
         balancerAdd(treeBranch)
-        return Pair(key, value)
+        return null
     }
 
     /**
