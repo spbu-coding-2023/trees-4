@@ -8,17 +8,17 @@ interface BinTree<K: Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>>: Iterable
 
     override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root)
 
-    fun add(key: K, value: V): Pair<K, V>?
+    fun add(key: K, value: V): V?
 
-    fun remove(key: K): Pair<K, V>?
+    fun remove(key: K): V?
 
-    fun find(key: K): Pair<K, V>? {
+    fun find(key: K): V? {
         var curNode = root
         while (curNode != null)
             curNode = when {
                 key > curNode.key -> curNode.right
                 key < curNode.key -> curNode.left
-                else -> return Pair(key, curNode.value)
+                else -> return curNode.value
             }
         return null
     }

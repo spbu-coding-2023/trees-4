@@ -18,7 +18,7 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
      * 2. If node with given key already exist, it will replace it with new node(also with new value).
      * In this case, method will return Pair(key, old value)
      */
-    override fun add(key: K, value: V): Pair<K, V>? {
+    override fun add(key: K, value: V): V? {
         val treeBranch = ArrayDeque<RBNode<K, V>>()
         val newNode = RBNode(key, value)
         if (root == null) {
@@ -34,7 +34,7 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
                     newNode.left = curNode.left
                     newNode.right = curNode.right
                     newNode.isRed = curNode.isRed
-                    return Pair(curNode.key, curNode.value)
+                    return curNode.value
                 }
                 curNode = nextNode
             }
@@ -111,7 +111,7 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
      * Removes node with the same key and returns node's key and value.
      * Or returns null if node with the same key doesn't exist.
      */
-    override fun remove(key: K): Pair<K, V>? {
+    override fun remove(key: K): V? {
         val treeBranch = ArrayDeque<RBNode<K, V>>()
         var curNode = root
         while (curNode != null) {
@@ -126,7 +126,7 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
                     else -> TODO("удалить у родителя указатель")
                 }
                 balancerRemove(treeBranch)
-                return Pair(curNode.key, curNode.value)
+                return curNode.value
             }
         }
         return null
