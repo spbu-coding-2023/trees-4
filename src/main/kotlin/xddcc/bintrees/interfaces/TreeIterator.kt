@@ -1,4 +1,4 @@
-package xddcc.bintrees
+package xddcc.bintrees.interfaces
 
 import xddcc.nodes.TreeNode
 import kotlin.collections.ArrayDeque
