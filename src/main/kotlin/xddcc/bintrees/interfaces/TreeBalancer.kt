@@ -30,6 +30,5 @@ interface TreeBalancer<K: Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>> {
             parent.attach(nodeRight)
         else /*only root doesn't have parent*/
             root = nodeRight
-
     }
 }
