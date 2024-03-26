@@ -14,10 +14,23 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
             var curNode = root
             while (curNode != null) {
                 treeBranch.addFirst(curNode)
-                curNode = when {
+                val nextNode = when {
                     newNode > curNode -> curNode.right
                     newNode < curNode -> curNode.left
-                    else -> curNode   //endless loop for equal keys
+                    else -> curNode
+                }
+                if (nextNode === curNode) {   //replace
+                    val parent = treeBranch.first()
+                    newNode.left = curNode.left
+                    newNode.right = curNode.right
+                    newNode.red = curNode.red
+                    if (newNode > parent) {
+                        parent.right = newNode
+                    } else {
+                        parent.left = newNode
+                    }
+                } else {
+                    curNode = nextNode
                 }
             }
             val parent = treeBranch.first()
