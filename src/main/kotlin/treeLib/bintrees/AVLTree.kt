@@ -44,7 +44,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		return tree
 	}
 
-	fun rotateLeft(node: AVLNode<K, V>) {
+	private fun rotateLeft(node: AVLNode<K, V>) {
 		if ((node.right) != null) {
 			val oldRight = node.right
 			node.right = oldRight?.left
@@ -70,7 +70,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		}
 	}
 
-	fun rotateRight(node: AVLNode<K, V>) {
+	private fun rotateRight(node: AVLNode<K, V>) {
 		if ((node.left) != null) {
 			val oldLeft = node.left
 			node.left = oldLeft?.right
