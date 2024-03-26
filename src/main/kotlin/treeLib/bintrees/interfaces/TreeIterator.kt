@@ -2,8 +2,10 @@ package treeLib.bintrees.interfaces
 
 import treeLib.nodes.TreeNode
 
-class TreeIterator<K: Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>>(private val root: Node_T?): Iterator<Pair<K, V>>{
+class TreeIterator<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(private val root: Node_T?) :
+	Iterator<Pair<K, V>> {
 	private val stack: ArrayDeque<Node_T> = ArrayDeque()
+
 	init {
 		root?.let { treeToStack(root) }
 	}

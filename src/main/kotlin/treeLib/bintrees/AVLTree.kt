@@ -49,7 +49,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 			val oldRight = node.right
 			node.right = oldRight?.left
 
-			if (oldRight?.left != null){
+			if (oldRight?.left != null) {
 				(oldRight.left)?.parent = node
 			}
 
@@ -75,7 +75,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 			val oldLeft = node.left
 			node.left = oldLeft?.right
 
-			if (oldLeft?.right != null){
+			if (oldLeft?.right != null) {
 				(oldLeft.right)?.parent = node
 			}
 

@@ -2,7 +2,7 @@ package treeLib.bintrees.interfaces
 
 import treeLib.nodes.TreeNode
 
-interface BinTree<K : Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>>: Iterable<Pair<K, V>> {
+interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Iterable<Pair<K, V>> {
 	var root: Node_T?
 	fun add(key: K, value: V)
 	fun search(key: K): Node_T? {
@@ -15,5 +15,6 @@ interface BinTree<K : Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>>: Iterabl
 			}
 		return null
 	}
+
 	override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root)
 }
