@@ -1,8 +1,9 @@
 package treeLib.bintrees
 
+import treeLib.bintrees.interfaces.Tree
 import treeLib.nodes.AVLNode
 
-class AVLTree<K : Comparable<K>, V> : BSTree<K, V>() {
+class AVLTree<K : Comparable<K>, V> : Tree<K, V> {
 	private var root: AVLNode<K, V>? = null
 
 	override fun add(key: K, value: V) {
@@ -31,7 +32,7 @@ class AVLTree<K : Comparable<K>, V> : BSTree<K, V>() {
 		}
 	}
 
-	override fun initTree(data: List<Pair<K, V>>): AVLTree<K, V> {
+	fun initTree(data: List<Pair<K, V>>): AVLTree<K, V> {
 		val tree = AVLTree<K, V>()
 		for (element in data) {
 			if (tree.root == null) {
