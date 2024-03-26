@@ -1,9 +1,9 @@
 package treeLib.bintrees
 
-import treeLib.bintrees.interfaces.Tree
+import treeLib.bintrees.interfaces.BinTree
 import treeLib.nodes.AVLNode
 
-class AVLTree<K : Comparable<K>, V> : Tree<K, V, AVLNode<K, V>> {
+class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 	override var root: AVLNode<K, V>? = null
 
 	override fun add(key: K, value: V) {
