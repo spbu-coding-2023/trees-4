@@ -32,24 +32,6 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		}
 	}
 
-	override fun search(key: K): AVLNode<K, V>? {
-		fun searchRec(node: AVLNode<K, V>?): AVLNode<K, V>? {
-			if ((node == null) or (node?.key == key) ){
-				return node
-			}
-			if (node != null) {
-				if (key < node.key) {
-					return searchRec(node.left)
-				} else {
-					return searchRec(node.right)
-				}
-			}
-			return node
-		}
-
-		return searchRec(root)
-	}
-
 	fun initTree(data: List<Pair<K, V>>): AVLTree<K, V> {
 		val tree = AVLTree<K, V>()
 		for (element in data) {
