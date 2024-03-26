@@ -24,12 +24,29 @@ class AVLTree<K : Comparable<K>, V> : BSTree<K, V>() {
 		}
 	}
 
-	///пока больше для отладки
-	fun inorder(root: AVLNode<K, V>?) {
-		if (root != null) {
-			inorder(root.left)
-			println(root.key)
-			inorder(root.right)
+	// add для коллекций?
+
+	override fun initTree(data:  List<Pair<K, V>>): AVLTree<K, V> {
+		val tree = AVLTree<K, V>()
+		for (element in data) {
+			if (tree.root == null) {
+				tree.root = AVLNode(element.first, element.second)
+			} else {
+				tree.add(element.first, element.second)
+			}
 		}
+		return tree
+	}
+
+	// пока больше для отладки -> замена на iterable
+	fun inorder() {
+		fun inorderRec(root: AVLNode<K, V>?) {
+			if (root != null) {
+				inorderRec(root.left)
+				println(root.key)
+				inorderRec(root.right)
+			}
+		}
+		inorderRec(root)
 	}
 }
