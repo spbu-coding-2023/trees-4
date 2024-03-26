@@ -3,8 +3,8 @@ package treeLib.bintrees
 import treeLib.bintrees.interfaces.Tree
 import treeLib.nodes.AVLNode
 
-class AVLTree<K : Comparable<K>, V> : Tree<K, V> {
-	private var root: AVLNode<K, V>? = null
+class AVLTree<K : Comparable<K>, V> : Tree<K, V, AVLNode<K, V>> {
+	override var root: AVLNode<K, V>? = null
 
 	override fun add(key: K, value: V) {
 		var node: AVLNode<K, V>? = null
@@ -107,5 +107,9 @@ class AVLTree<K : Comparable<K>, V> : Tree<K, V> {
 			}
 		}
 		inorderRec(root)
+	}
+
+	override fun iterator(): Iterator<Pair<K, V>> {
+		TODO("Not yet implemented")
 	}
 }
