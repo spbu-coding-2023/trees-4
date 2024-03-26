@@ -2,12 +2,12 @@ package xddcc.bintrees
 
 import xddcc.nodes.RBNode
 
-class RBTree<K: Comparable<K>>: Iterable<K> {
-    private var root: RBNode<K>? = null
+class RBTree<K: Comparable<K>, V>: Iterable<K> {
+    private var root: RBNode<K, V>? = null
 
-    fun add(key: K) {
-        val treeBranch = ArrayDeque<RBNode<K>>()
-        val newNode = RBNode(key)
+    fun add(key: K, value: V) {
+        val treeBranch = ArrayDeque<RBNode<K, V>>()
+        val newNode = RBNode(key, value)
         if (root == null) {
             root = newNode
         } else {
@@ -44,7 +44,7 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
         balanceAdd(treeBranch)
     }
 
-    private fun balanceAdd(treeBranch: ArrayDeque<RBNode<K>>) {
+    private fun balanceAdd(treeBranch: ArrayDeque<RBNode<K, V>>) {
         var (son, parent, grandparent) =
             Triple(treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull())
 
@@ -101,7 +101,7 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
         root?.red = false
     }
 
-    private fun rotateRight(node: RBNode<K>, parent: RBNode<K>?) {
+    private fun rotateRight(node: RBNode<K, V>, parent: RBNode<K, V>?) {
         val nodeLeft = node.left
         node.left = nodeLeft?.right
         nodeLeft?.right = node
@@ -116,7 +116,7 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
         }
     }
 
-    private fun rotateLeft(node: RBNode<K>, parent: RBNode<K>?) {
+    private fun rotateLeft(node: RBNode<K, V>, parent: RBNode<K, V>?) {
         val nodeRight = node.right
         node.right = nodeRight?.left
         nodeRight?.left = node
@@ -132,7 +132,7 @@ class RBTree<K: Comparable<K>>: Iterable<K> {
     }
 
     fun remove(key: K): Boolean {
-        var prevNode: RBNode<K>? = null
+        var prevNode: RBNode<K, V>? = null
         var removeNode = root
         while (removeNode != null) {
             when (key.compareTo(removeNode.key)){
