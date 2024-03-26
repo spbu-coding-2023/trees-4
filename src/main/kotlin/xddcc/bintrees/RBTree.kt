@@ -41,6 +41,7 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
             val parent = treeBranch.first()
             parent.attach(newNode)
         }
+        size++
         treeBranch.addFirst(newNode)
         balancerAdd(treeBranch)
         return null
@@ -111,30 +112,24 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
      * Or returns null if node with the same key doesn't exist.
      */
     override fun remove(key: K): Pair<K, V>? {
-        var prevNode: RBNode<K, V>? = null
-        var removeNode = root
-        while (removeNode != null) {
-            when (key.compareTo(removeNode.key)){
-                +1  -> {
-                    prevNode = removeNode
-                    removeNode = removeNode.right
+        val treeBranch = ArrayDeque<RBNode<K, V>>()
+        var curNode = root
+        while (curNode != null) {
+            treeBranch.addFirst(curNode)
+            val nextNode = curNode.moveOn(key)
+            if (nextNode === curNode) {   //remove
+                val parent = treeBranch.first()
+                when {
+                    curNode.left != null && curNode.right != null -> TODO()
+                    curNode.left != null -> TODO("replace nodes")
+                    curNode.right != null -> TODO("replace nodes")
+                    else -> TODO("удалить у родителя указатель")
                 }
-                +0  -> {
-                    if (prevNode == null) {
-                        root = null
-                    } else {
-                        TODO("correct remove")
-                    }
-                    TODO()
-                }
-                -1 -> {
-                    prevNode = removeNode
-                    removeNode = removeNode.left
-                }
+                balancerRemove(treeBranch)
+                return Pair(curNode.key, curNode.value)
             }
         }
-
-        TODO()
+        return null
     }
 
     /**
