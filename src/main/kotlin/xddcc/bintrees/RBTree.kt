@@ -1,11 +1,14 @@
 package xddcc.bintrees
 
+import xddcc.bintrees.interfaces.BinTree
+import xddcc.bintrees.interfaces.TreeBalancer
 import xddcc.nodes.RBNode
 
-class RBTree<K: Comparable<K>, V>: Iterable<K> {
-    private var root: RBNode<K, V>? = null
+class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K, V, RBNode<K, V>> {
+    override var root: RBNode<K, V>? = null
+    override var size: Int = 0
 
-    fun add(key: K, value: V) {
+    override fun add(key: K, value: V): Pair<K, V>? {
         val treeBranch = ArrayDeque<RBNode<K, V>>()
         val newNode = RBNode(key, value)
         if (root == null) {
@@ -41,10 +44,11 @@ class RBTree<K: Comparable<K>, V>: Iterable<K> {
             }
             treeBranch.addFirst(newNode)
         }
-        balanceAdd(treeBranch)
+        balancerAdd(treeBranch)
+        return Pair(key, value)
     }
 
-    private fun balanceAdd(treeBranch: ArrayDeque<RBNode<K, V>>) {
+    override fun balancerAdd(treeBranch: ArrayDeque<RBNode<K, V>>) {
         var (son, parent, grandparent) =
             Triple(treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull())
 
@@ -101,37 +105,7 @@ class RBTree<K: Comparable<K>, V>: Iterable<K> {
         root?.isRed = false
     }
 
-    private fun rotateRight(node: RBNode<K, V>, parent: RBNode<K, V>?) {
-        val nodeLeft = node.left
-        node.left = nodeLeft?.right
-        nodeLeft?.right = node
-
-        if (parent != null) {
-            if (node > parent)
-                parent.right = nodeLeft
-            else
-                parent.left = nodeLeft
-        } else /* node == root */ {
-            root = nodeLeft
-        }
-    }
-
-    private fun rotateLeft(node: RBNode<K, V>, parent: RBNode<K, V>?) {
-        val nodeRight = node.right
-        node.right = nodeRight?.left
-        nodeRight?.left = node
-
-        if (parent != null) {
-            if (node > parent)
-                parent.right = nodeRight
-            else
-                parent.left = nodeRight
-        } else /* node == root */ {
-            root = nodeRight
-        }
-    }
-
-    fun remove(key: K): Boolean {
+    override fun remove(key: K): Pair<K, V>? {
         var prevNode: RBNode<K, V>? = null
         var removeNode = root
         while (removeNode != null) {
@@ -146,7 +120,7 @@ class RBTree<K: Comparable<K>, V>: Iterable<K> {
                     } else {
                         TODO("correct remove")
                     }
-                    return true
+                    TODO()
                 }
                 -1 -> {
                     prevNode = removeNode
@@ -155,37 +129,10 @@ class RBTree<K: Comparable<K>, V>: Iterable<K> {
             }
         }
 
-        return false
+        TODO()
     }
 
-    fun find(key: K): Boolean {
-        var curNode = root
-        while (curNode != null) {
-            when (key.compareTo(curNode.key)){
-                +1  -> curNode = curNode.right
-                +0  -> return true
-                -1 -> curNode = curNode.left
-            }
-        }
-        return false
+    override fun balancerRemove(treeBranch: ArrayDeque<RBNode<K, V>>) {
+        TODO("Not yet implemented")
     }
-
-    fun max(): K? {
-        var maxNode = root
-        while (maxNode?.right != null) maxNode = maxNode.right
-        return maxNode?.key
-    }
-
-    fun min(): K? {
-        var minNode = root
-        while (minNode?.left != null) minNode = minNode.left
-        return minNode?.key
-    }
-
-    fun root(): K? = root?.key
-
-    fun clear(): Unit { root = null }
-
-    override fun iterator(): Iterator<K> = TreeIterator(root)
-
 }
