@@ -15,13 +15,7 @@ abstract class TreeNode<K: Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>>(
         return (node != null) && (Pair(key, value) == Pair(node.key, node.value))
     }
 
-    fun attach(node: Node_T?): Boolean {
-        if (node == null) return false
-        when {
-            this > node -> left = node
-            this < node -> right = node
-            else -> return false
-        }
-        return true
-    }
+    abstract fun attach(node: Node_T?): Boolean
+
+    abstract fun moveOn(otherKey: K): Node_T?
 }
