@@ -21,8 +21,12 @@ class AVLTree<K : Comparable<K>, V> : BSTree<K, V>() {
 		} else {
 			if (key < node.key) {
 				node.left = AVLNode(key, value)
-			} else {
+				(node.left)?.parent = node
+			} else if (key > node.key) {
 				node.right = AVLNode(key, value)
+				(node.right)?.parent = node
+			} else {
+				println("Error: this key is already in the tree\n.")
 			}
 		}
 	}
