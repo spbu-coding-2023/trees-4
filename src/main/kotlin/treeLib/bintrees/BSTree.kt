@@ -1,5 +1,7 @@
 package treeLib.bintrees
 
+import treeLib.bintrees.interfaces.Tree
+
 open class BSTree<K : Comparable<K>, V> : Tree<K, V> {
 	override fun add(key: K, value: V) {
 		TODO("Not yet implemented")
