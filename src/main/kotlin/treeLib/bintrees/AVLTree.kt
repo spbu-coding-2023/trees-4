@@ -95,17 +95,4 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 			println("Node.left is null.\n")
 		}
 	}
-
-	//дебаг
-	fun inorder() {
-		fun inorderRec(root: AVLNode<K, V>?) {
-			if (root != null) {
-				inorderRec(root.left)
-				println(root.key)
-				inorderRec(root.right)
-				println("-")
-			}
-		}
-		inorderRec(root)
-	}
 }
