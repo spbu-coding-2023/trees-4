@@ -36,6 +36,8 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 			}
 		}
 
+		balanceNode(node)
+
 		return toReturn
 	}
 
