@@ -2,7 +2,7 @@ package treeLib.nodes
 
 abstract class TreeNode<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 	internal val key: K,
-	internal val value: V,
+	internal var value: V,
 	internal var right: Node_T? = null,
 	internal var left: Node_T? = null,
 ) : Comparable<Node_T> {

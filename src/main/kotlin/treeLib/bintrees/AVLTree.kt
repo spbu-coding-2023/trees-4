@@ -6,9 +6,10 @@ import treeLib.nodes.AVLNode
 class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 	override var root: AVLNode<K, V>? = null
 
-	override fun add(key: K, value: V) {
+	override fun add(key: K, value: V): V? {
 		var node: AVLNode<K, V>? = null
 		var curr = root
+		var toReturn: V? = null
 		while (curr != null) {
 			node = curr
 			if (key < curr.key) {
@@ -27,9 +28,12 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 				node.right = AVLNode(key, value)
 				(node.right)?.parent = node
 			} else {
-				println("Error: this key is already in the tree\n.")
+				toReturn = node.value
+				node.value = value
 			}
 		}
+
+		return toReturn
 	}
 
 	fun initTree(data: List<Pair<K, V>>): AVLTree<K, V> {
