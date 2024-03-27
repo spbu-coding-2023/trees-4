@@ -7,7 +7,15 @@ class AVLNode<K : Comparable<K>, V>(
 	left: AVLNode<K, V>? = null
 ) : TreeNode<K, V, AVLNode<K, V>>(key, value, right, left) {
 	internal var parent: AVLNode<K, V>? = null
-	internal var height: Int = 1
+	private var height: Int = 1
+
+	fun height(node: AVLNode<K, V>?) : Int {
+		if (node == null) {
+			return 0
+		}
+		return node.height
+	}
+
 	override fun attach(node: AVLNode<K, V>?): Boolean {
 		TODO("Not yet implemented")
 	}
