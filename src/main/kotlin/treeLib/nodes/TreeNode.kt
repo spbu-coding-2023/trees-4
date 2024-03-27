@@ -1,4 +1,4 @@
-package xddcc.nodes
+package treeLib.nodes
 
 abstract class TreeNode<K: Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>>(
     val key: K,

@@ -1,6 +1,6 @@
-package xddcc.bintrees.interfaces
+package treeLib.bintrees.interfaces
 
-import xddcc.nodes.TreeNode
+import treeLib.nodes.TreeNode
 import kotlin.collections.ArrayDeque
 
 class TreeIterator<K: Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>>(private val root: Node_T?): Iterator<Pair<K, V>>{

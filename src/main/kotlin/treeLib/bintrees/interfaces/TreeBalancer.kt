@@ -1,7 +1,7 @@
-package xddcc.bintrees.interfaces
+package treeLib.bintrees.interfaces
 
-import xddcc.nodes.RBNode
-import xddcc.nodes.TreeNode
+import treeLib.nodes.RBNode
+import treeLib.nodes.TreeNode
 
 interface TreeBalancer<K: Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>> {
     var root: RBNode<K, V>?

@@ -1,8 +1,8 @@
-package xddcc.bintrees
+package treeLib.bintrees
 
-import xddcc.bintrees.interfaces.BinTree
-import xddcc.bintrees.interfaces.TreeBalancer
-import xddcc.nodes.RBNode
+import treeLib.bintrees.interfaces.BinTree
+import treeLib.bintrees.interfaces.TreeBalancer
+import treeLib.nodes.RBNode
 
 /**
  * Class which implements... Red-Black Tree :O

@@ -1,4 +1,4 @@
-package xddcc.nodes
+package treeLib.nodes
 
 class RBNode<K: Comparable<K>, V>(
     key: K,

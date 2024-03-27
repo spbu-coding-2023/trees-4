@@ -1,6 +1,6 @@
-package xddcc.bintrees.interfaces
+package treeLib.bintrees.interfaces
 
-import xddcc.nodes.TreeNode
+import treeLib.nodes.TreeNode
 
 interface BinTree<K: Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>>: Iterable<Pair<K, V>> {
     var root: Node_T?
