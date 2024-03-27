@@ -110,11 +110,11 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		return node.height
 	}
 
-	private fun bFactor(node: AVLNode<K, V>?) : Int? {
+	private fun bFactor(node: AVLNode<K, V>?) : Int {
 		if (node != null) {
 			return height(node.right) - height(node.left)
 		}
-		return null
+		return 0
 	}
 
 	private fun fixHeight(node: AVLNode<K, V>?) {
@@ -128,4 +128,25 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 			}
 		}
 	}
+
+	private fun balanceNode(node: AVLNode<K, V>?) {
+		fixHeight(node)
+		if (bFactor(node) == 2) {
+			if (node != null) {
+				if (bFactor(node.right) < 0) {
+					node.right?.let { rotateRight(it) }
+					rotateLeft(node)
+				}
+			}
+		}
+		if (bFactor(node) == -2) {
+			if (node != null) {
+				if (bFactor(node.left) > 0) {
+					node.left?.let { rotateLeft(it) }
+					rotateRight(node)
+				}
+			}
+		}
+	}
+
 }
