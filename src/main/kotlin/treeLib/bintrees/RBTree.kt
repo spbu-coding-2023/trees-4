@@ -8,7 +8,7 @@ import treeLib.nodes.RBNode
  * Class which implements... Red-Black Tree :O
  * Takes two types: for key(K) and for value(V)
  */
-class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K, V, RBNode<K, V>> {
+class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K, V, RBNode<K, V>> {
 	override var root: RBNode<K, V>? = null
 	override var amountOfNodes: Int = 0
 
@@ -52,7 +52,11 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
 	 */
 	override fun balancerAdd(treeBranch: ArrayDeque<RBNode<K, V>>) {
 		var (son, parent, grandparent) =
-			Triple(treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull(), treeBranch.removeFirstOrNull())
+			Triple(
+				treeBranch.removeFirstOrNull(),
+				treeBranch.removeFirstOrNull(),
+				treeBranch.removeFirstOrNull()
+			)
 
 		while (parent != null && parent.isRed) {
 			if (parent === grandparent?.left) {
@@ -76,7 +80,7 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
 					grandparent.isRed = true
 					rotateRight(grandparent, treeBranch.firstOrNull())
 				}
-			} else if (parent === grandparent?.right){
+			} else if (parent === grandparent?.right) {
 				val uncle = grandparent.left
 				if (uncle?.isRed == true) {
 					parent.isRed = false
@@ -99,7 +103,7 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
 						rotateLeft(grandparent, treeBranch.firstOrNull())
 					}
 				}
-			} else /*grandparent == null*/{
+			} else /*grandparent == null*/ {
 				parent.isRed = false
 			}
 		}

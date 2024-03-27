@@ -6,7 +6,7 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 	var root: Node_T?
 	var amountOfNodes: Int
 
-	fun add(key: K, value: V) : V?
+	fun add(key: K, value: V): V?
 
 	fun search(key: K): Node_T? {
 		var curNode = root
@@ -35,7 +35,9 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 
 	fun root(): Pair<K, V>? = root?.let { Pair(it.key, it.value) }
 
-	fun clear() { root?.let { root = null } }
+	fun clear() {
+		root?.let { root = null }
+	}
 
 	fun countNodes(): Int = amountOfNodes
 
