@@ -111,7 +111,7 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
 	 * Removes node with the same key and returns node's key and value.
 	 * Or returns null if node with the same key doesn't exist.
 	 */
-	override fun remove(key: K): V? {
+	fun remove(key: K): V? {
 		val treeBranch = ArrayDeque<RBNode<K, V>>()
 		var curNode = root
 		while (curNode != null) {
