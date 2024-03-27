@@ -4,7 +4,7 @@ import treeLib.nodes.TreeNode
 
 interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Iterable<Pair<K, V>> {
 	var root: Node_T?
-	var size: Int
+	var amountOfNodes: Int
 
 	fun add(key: K, value: V) : V?
 
@@ -37,7 +37,7 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 
 	fun clear() { root?.let { root = null } }
 
-	fun size(): Int = size
+	fun countNodes(): Int = amountOfNodes
 
 	override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root)
 }

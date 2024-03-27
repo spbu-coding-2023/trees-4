@@ -5,6 +5,9 @@ import treeLib.nodes.AVLNode
 
 class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 	override var root: AVLNode<K, V>? = null
+	override var amountOfNodes: Int
+		get() = TODO("Not yet implemented")
+		set(value) {}
 
 	override fun add(key: K, value: V): V? {
 		var node: AVLNode<K, V>? = null

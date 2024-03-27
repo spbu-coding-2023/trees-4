@@ -10,7 +10,7 @@ import treeLib.nodes.RBNode
  */
 class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K, V, RBNode<K, V>> {
 	override var root: RBNode<K, V>? = null
-	override var size: Int = 0
+	override var amountOfNodes: Int = 0
 
 	/**
 	 * Adds or replaces node to the tree depending on given key:
@@ -41,7 +41,7 @@ class RBTree<K: Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K,
 			val parent = treeBranch.first()
 			parent.attach(newNode)
 		}
-		size++
+		amountOfNodes++
 		treeBranch.addFirst(newNode)
 		balancerAdd(treeBranch)
 		return null
