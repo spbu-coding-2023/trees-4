@@ -103,10 +103,17 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		}
 	}
 
-	fun height(node: AVLNode<K, V>?) : Int {
+	private fun height(node: AVLNode<K, V>?) : Int {
 		if (node == null) {
 			return 0
 		}
 		return node.height
+	}
+
+	private fun bFactor(node: AVLNode<K, V>?) : Int? {
+		if (node != null) {
+			return height(node.right) - height(node.left)
+		}
+		return null
 	}
 }
