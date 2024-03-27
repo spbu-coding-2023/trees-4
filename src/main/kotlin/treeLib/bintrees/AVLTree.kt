@@ -116,4 +116,16 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		}
 		return null
 	}
+
+	private fun fixHeight(node: AVLNode<K, V>?) {
+		if (node != null) {
+			var heightLeft = height(node.left)
+			var heightRight = height(node.right)
+			if (heightLeft > heightRight) {
+				node.height = heightLeft + 1
+			} else {
+				node.height = heightRight + 1
+			}
+		}
+	}
 }
