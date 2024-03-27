@@ -1,21 +1,22 @@
 package treeLib.nodes
 
-abstract class TreeNode<K: Comparable<K>, V, Node_T: TreeNode<K, V, Node_T>>(
-    val key: K,
-    val value: V,
-    var right: Node_T? = null,
-    var left: Node_T? = null,
-): Comparable<Node_T> {
-    override fun compareTo(other: Node_T) = key.compareTo(other.key)
+abstract class TreeNode<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
+	internal val key: K,
+	internal val value: V,
+	internal var right: Node_T? = null,
+	internal var left: Node_T? = null,
+) : Comparable<Node_T> {
 
-    override fun hashCode() = Pair(key, value).hashCode()
+	override fun compareTo(other: Node_T) = key.compareTo(other.key)
 
-    override fun equals(other: Any?): Boolean {
-        val node = other as? Node_T
-        return (node != null) && (Pair(key, value) == Pair(node.key, node.value))
-    }
+	override fun hashCode() = Pair(key, value).hashCode()
 
-    abstract fun attach(node: Node_T?): Boolean
+	override fun equals(other: Any?): Boolean {
+		val node = other as? Node_T
+		return (node != null) && (Pair(key, value) == Pair(node.key, node.value))
+	}
 
-    abstract fun moveOn(otherKey: K): Node_T?
+	abstract fun attach(node: Node_T?): Boolean
+
+	abstract fun moveOn(otherKey: K): Node_T?
 }
