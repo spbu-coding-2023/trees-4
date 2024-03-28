@@ -19,6 +19,8 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 		return null
 	}
 
+
+
 	fun max(): Pair<K, V>? {
 		var curNode = root
 		while (curNode?.right != null)
@@ -39,7 +41,9 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 		root?.let { root = null }
 	}
 
-	fun countNodes(): Int = amountOfNodes
+	fun countNodes(): Int {
+		return amountOfNodes
+	}
 
 	override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root)
 }

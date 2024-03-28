@@ -5,9 +5,7 @@ import treeLib.nodes.AVLNode
 
 class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 	override var root: AVLNode<K, V>? = null
-	override var amountOfNodes: Int
-		get() = TODO("Not yet implemented")
-		set(value) {}
+	override var amountOfNodes = 0
 
 	override fun add(key: K, value: V): V? {
 		fun addRec(node: AVLNode<K, V>?, key: K, value: V): AVLNode<K, V>? {
@@ -29,8 +27,10 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		for (element in data) {
 			if (tree.root == null) {
 				tree.root = AVLNode(element.first, element.second)
+				amountOfNodes = 1
 			} else {
 				tree.add(element.first, element.second)
+				amountOfNodes += 1
 			}
 		}
 		return tree
