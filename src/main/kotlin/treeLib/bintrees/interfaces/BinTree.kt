@@ -8,7 +8,7 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 
 	fun add(key: K, value: V): V?
 
-	fun search(key: K): Node_T? {
+	fun findByKey(key: K): Node_T? {
 		var curNode = root
 		while (curNode != null)
 			curNode = when {
