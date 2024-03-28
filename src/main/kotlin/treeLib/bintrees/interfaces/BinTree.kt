@@ -19,6 +19,20 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 		return null
 	}
 
+	fun changeVal(key: K, newValue: V): V? {
+		var curNode = root
+		while (curNode != null)
+			curNode = when {
+				key > curNode.key -> curNode.right
+				key < curNode.key -> curNode.left
+				else -> {
+					curNode.value = newValue
+					return newValue
+				}
+			}
+		return null
+	}
+
 	fun max(): Pair<K, V>? {
 		var curNode = root
 		while (curNode?.right != null)

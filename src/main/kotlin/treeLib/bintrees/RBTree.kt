@@ -14,9 +14,8 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K
 
 	/**
 	 * Adds or replaces node to the tree depending on given key:
-	 * 1. Adds node to the tree and returns null,
-	 * 2. If node with given key already exist, it will replace it with new node(also with new value).
-	 * In this case, method will return Pair(key, old value)
+	 * 1. Adds node to the tree and returns VALUE,
+	 * 2. If node with given key already exist, it does nothing(check changeVAAAAAAAAAAAAAAAAAAAL() method)
 	 */
 	override fun add(key: K, value: V): V? {
 		val treeBranch = ArrayDeque<RBNode<K, V>>()
@@ -28,14 +27,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K
 			while (curNode != null) {
 				treeBranch.addFirst(curNode)
 				val nextNode = curNode.moveOn(key)
-				if (nextNode === curNode) {   //replace
-					val parent = treeBranch.first()
-					parent.attach(newNode)
-					newNode.left = curNode.left
-					newNode.right = curNode.right
-					newNode.isRed = curNode.isRed
-					return curNode.value
-				}
+				if (nextNode === curNode) return null	//node with given key already exist
 				curNode = nextNode
 			}
 			val parent = treeBranch.first()
@@ -44,7 +36,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K
 		amountOfNodes++
 		treeBranch.addFirst(newNode)
 		balancerAdd(treeBranch)
-		return null
+		return value
 	}
 
 	/**
