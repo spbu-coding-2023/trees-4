@@ -15,8 +15,4 @@ abstract class TreeNode<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 		val node = other as? Node_T
 		return (node != null) && (Pair(key, value) == Pair(node.key, node.value))
 	}
-
-	abstract fun attach(node: Node_T?): Boolean
-
-	abstract fun moveOn(otherKey: K): Node_T?
 }

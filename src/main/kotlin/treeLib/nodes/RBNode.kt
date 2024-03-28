@@ -7,7 +7,7 @@ class RBNode<K : Comparable<K>, V>(
 	left: RBNode<K, V>? = null,
 	var isRed: Boolean = true,
 ) : TreeNode<K, V, RBNode<K, V>>(key, value, right, left) {
-	override fun attach(node: RBNode<K, V>?): Boolean {
+	fun attach(node: RBNode<K, V>?): Boolean {
 		if (node == null) return false
 		when {
 			this > node -> left = node
@@ -17,7 +17,7 @@ class RBNode<K : Comparable<K>, V>(
 		return true
 	}
 
-	override fun moveOn(otherKey: K) = when {
+	fun moveOn(otherKey: K) = when {
 		key > otherKey -> left
 		key < otherKey -> right
 		else -> this
