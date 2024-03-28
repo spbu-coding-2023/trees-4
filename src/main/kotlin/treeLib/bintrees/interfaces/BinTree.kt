@@ -19,7 +19,7 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 		return null
 	}
 
-
+	fun remove(key: K): V?
 
 	fun max(): Pair<K, V>? {
 		var curNode = root

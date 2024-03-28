@@ -7,6 +7,47 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 	override var root: AVLNode<K, V>? = null
 	override var amountOfNodes = 0
 
+	override fun remove(key: K): V? {
+		var value : V? = null
+		fun removeRec(node: AVLNode<K, V>?, key: K) : AVLNode<K, V>? {
+			if (node == null) return null
+			if (key < node.key) {
+				node.left = removeRec(node.left, key)
+			} else if (key > node.key) {
+				node.right = removeRec(node.right, key)
+			} else {
+				val nodeA = node.left
+				val nodeB = node.right
+				value = node.value
+				if (nodeB == null) {
+					return nodeA
+				}
+				val min = findMin(nodeB)
+				min?.right = removeMin(nodeB)
+				min?.left = nodeA
+				return balanceNode(min)
+			}
+			return balanceNode(node)
+		}
+		removeRec(root, key)
+		return value
+	}
+
+	private fun findMin(node: AVLNode<K, V>?): AVLNode<K, V>? {
+		if (node?.left != null) {
+			return findMin(node.left)
+		}
+		return (node)
+	}
+
+	private fun removeMin(node: AVLNode<K, V>?) : AVLNode<K, V>? {
+		if (node?.left == null) {
+			return node?.right
+		}
+		node.left = removeMin(node.left)
+		return balanceNode(node)
+	}
+
 	override fun add(key: K, value: V): V? {
 		fun addRec(node: AVLNode<K, V>?, key: K, value: V): AVLNode<K, V>? {
 			if (node == null) {
