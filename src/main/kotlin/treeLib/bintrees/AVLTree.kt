@@ -57,6 +57,8 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 				val nodeB = nodeA.right
 				nodeA.right = nodeB?.left
 				nodeB?.left = nodeA
+				fixHeight(nodeA)
+				fixHeight(nodeB)
 			} else {
 				throw NullPointerException("Right child node cannot be null.")
 			}
@@ -71,6 +73,8 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 				val nodeB = nodeA.left
 				nodeA.left = nodeB?.right
 				nodeB?.right = nodeA
+				fixHeight(nodeA)
+				fixHeight(nodeB)
 			} else {
 				throw NullPointerException("Left child node cannot be null.")
 			}
