@@ -65,12 +65,12 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		}
 	}
 
-	private fun rotateRight(node: AVLNode<K, V>?) {
-		if (node != null) {
-			if ((node.left) != null) {
-				val oldLeft = node.left
-				node.left = oldLeft?.right
-				oldLeft?.right = node
+	private fun rotateRight(nodeA: AVLNode<K, V>?) {
+		if (nodeA != null) {
+			if ((nodeA.left) != null) {
+				val nodeB = nodeA.left
+				nodeA.left = nodeB?.right
+				nodeB?.right = nodeA
 			} else {
 				throw NullPointerException("Left child node cannot be null.")
 			}
