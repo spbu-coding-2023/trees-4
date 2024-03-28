@@ -55,5 +55,12 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 
 	fun countNodes(): Int = amountOfNodes
 
-	override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root)
+	/**
+	 * basic In-order iterator
+	 */
+	override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.IN_ORDER)
+
+	fun preOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.PRE_ORDER)
+
+	fun postOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.POST_ORDER)
 }
