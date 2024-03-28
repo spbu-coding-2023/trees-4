@@ -53,55 +53,63 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		return tree
 	}
 
-	private fun rotateLeft(node: AVLNode<K, V>) {
-		if ((node.right) != null) {
-			val oldRight = node.right
-			node.right = oldRight?.left
+	private fun rotateLeft(node: AVLNode<K, V>?) {
+		if (node != null) {
+			if ((node.right) != null) {
+				val oldRight = node.right
+				node.right = oldRight?.left
 
-			if (oldRight?.left != null) {
-				(oldRight.left)?.parent = node
-			}
+				if (oldRight?.left != null) {
+					(oldRight.left)?.parent = node
+				}
 
-			oldRight?.parent = node.parent
-			if ((node.parent) == null) {
-				root = oldRight
-			} else if (node == (node.parent)?.left) {
-				(node.parent)?.left = oldRight
+				oldRight?.parent = node.parent
+				if ((node.parent) == null) {
+					root = oldRight
+				} else if (node == (node.parent)?.left) {
+					(node.parent)?.left = oldRight
+				} else {
+					(node.parent)?.right = oldRight
+				}
+
+				oldRight?.left = node
+				node.parent = oldRight
+
 			} else {
-				(node.parent)?.right = oldRight
+				throw NullPointerException("Right child node cannot be null.")
 			}
-
-			oldRight?.left = node
-			node.parent = oldRight
-
 		} else {
-			println("Node.right is null.\n")
+			throw NullPointerException("Node cannot be null.")
 		}
 	}
 
-	private fun rotateRight(node: AVLNode<K, V>) {
-		if ((node.left) != null) {
-			val oldLeft = node.left
-			node.left = oldLeft?.right
+	private fun rotateRight(node: AVLNode<K, V>?) {
+		if (node != null) {
+			if ((node.left) != null) {
+				val oldLeft = node.left
+				node.left = oldLeft?.right
 
-			if (oldLeft?.right != null) {
-				(oldLeft.right)?.parent = node
-			}
+				if (oldLeft?.right != null) {
+					(oldLeft.right)?.parent = node
+				}
 
-			oldLeft?.parent = node.parent
-			if ((node.parent) == null) {
-				root = oldLeft
-			} else if (node == (node.parent)?.right) {
-				(node.parent)?.right = oldLeft
+				oldLeft?.parent = node.parent
+				if ((node.parent) == null) {
+					root = oldLeft
+				} else if (node == (node.parent)?.right) {
+					(node.parent)?.right = oldLeft
+				} else {
+					(node.parent)?.left = oldLeft
+				}
+
+				oldLeft?.right = node
+				node.parent = oldLeft
+
 			} else {
-				(node.parent)?.left = oldLeft
+				throw NullPointerException("Left child node cannot be null.")
 			}
-
-			oldLeft?.right = node
-			node.parent = oldLeft
-
 		} else {
-			println("Node.left is null.\n")
+			throw NullPointerException("Node cannot be null.")
 		}
 	}
 
@@ -112,11 +120,11 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		return node.height
 	}
 
-	private fun bFactor(node: AVLNode<K, V>?) : Int {
-		if (node != null) {
-			return height(node.right) - height(node.left)
+	private fun balanceFactor(node: AVLNode<K, V>?) : Int {
+		if (node == null) {
+			throw NullPointerException("Node cannot be null.")
 		}
-		return 0
+		return height(node.right) - height(node.left)
 	}
 
 	private fun fixHeight(node: AVLNode<K, V>?) {
@@ -133,17 +141,17 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 
 	private fun balanceNode(node: AVLNode<K, V>?) {
 		fixHeight(node)
-		if (bFactor(node) == 2) {
+		if (balanceFactor(node) == 2) {
 			if (node != null) {
-				if (bFactor(node.right) < 0) {
+				if (balanceFactor(node.right) < 0) {
 					node.right?.let { rotateRight(it) }
 					rotateLeft(node)
 				}
 			}
 		}
-		if (bFactor(node) == -2) {
+		if (balanceFactor(node) == -2) {
 			if (node != null) {
-				if (bFactor(node.left) > 0) {
+				if (balanceFactor(node.left) > 0) {
 					node.left?.let { rotateLeft(it) }
 					rotateRight(node)
 				}
