@@ -83,6 +83,24 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		}
 	}
 
+	private fun bigRotateLeft(nodeA: AVLNode<K, V>?) {
+		if (nodeA != null) {
+			rotateRight(nodeA.right)
+			rotateLeft(nodeA)
+		} else {
+			throw NullPointerException("Node cannot be null.")
+		}
+	}
+
+	private fun bigRotateRight(nodeA: AVLNode<K, V>?) {
+		if (nodeA != null) {
+			rotateLeft(nodeA.left)
+			rotateRight(nodeA)
+		} else {
+			throw NullPointerException("Node cannot be null.")
+		}
+	}
+
 	private fun height(node: AVLNode<K, V>?) : Int {
 		if (node == null) {
 			return 0
@@ -114,7 +132,8 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		if (balanceFactor(node) == 2) {
 			if (node != null) {
 				if (balanceFactor(node.right) < 0) {
-					node.right?.let { rotateRight(it) }
+					bigRotateLeft(node)
+				} else {
 					rotateLeft(node)
 				}
 			}
@@ -122,7 +141,8 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		if (balanceFactor(node) == -2) {
 			if (node != null) {
 				if (balanceFactor(node.left) > 0) {
-					node.left?.let { rotateLeft(it) }
+					bigRotateRight(node)
+				} else {
 					rotateRight(node)
 				}
 			}
