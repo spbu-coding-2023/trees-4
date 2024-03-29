@@ -1,7 +1,7 @@
 package treeLib.nodes
 
 abstract class TreeNode<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
-	internal val key: K,
+	internal var key: K,
 	internal var value: V,
 	internal var right: Node_T? = null,
 	internal var left: Node_T? = null,
@@ -16,7 +16,5 @@ abstract class TreeNode<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 		return (node != null) && (Pair(key, value) == Pair(node.key, node.value))
 	}
 
-	abstract fun attach(node: Node_T?): Boolean
-
-	abstract fun moveOn(otherKey: K): Node_T?
 }
+
