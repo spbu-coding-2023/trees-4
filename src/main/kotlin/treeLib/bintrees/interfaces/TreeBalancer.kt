@@ -1,16 +1,15 @@
 package treeLib.bintrees.interfaces
 
-import treeLib.nodes.RBNode
 import treeLib.nodes.TreeNode
 
 interface TreeBalancer<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> {
-	var root: RBNode<K, V>?
+	var root: Node_T?
 
-	fun balancerAdd(treeBranch: ArrayDeque<RBNode<K, V>>)
+	fun balancerAdd(treeBranch: ArrayDeque<Node_T>)
 
-	fun balancerRemove(treeBranch: ArrayDeque<RBNode<K, V>>)
+	fun balancerRemove(parent: Node_T?, removed: Node_T?)
 
-	fun rotateRight(node: RBNode<K, V>?, parent: RBNode<K, V>?) {
+	fun rotateRight(node: Node_T?, parent: Node_T?) {
 		if (node == null) return
 
 		val nodeLeft = node.left
@@ -23,7 +22,7 @@ interface TreeBalancer<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> {
 			root = nodeLeft
 	}
 
-	fun rotateLeft(node: RBNode<K, V>?, parent: RBNode<K, V>?) {
+	fun rotateLeft(node: Node_T?, parent: Node_T?) {
 		if (node == null) return
 
 		val nodeRight = node.right
