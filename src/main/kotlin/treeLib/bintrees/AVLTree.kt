@@ -158,4 +158,11 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		return node
 	}
 
+	override fun height(): Int? {
+		if (root == null) {
+			return 0
+		} else {
+			return root?.height
+		}
+	}
 }
