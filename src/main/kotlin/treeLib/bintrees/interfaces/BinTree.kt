@@ -46,4 +46,15 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 	}
 
 	override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root)
+
+	private fun hiddenHeight(tNode: Node_T?): Int {
+		if(tNode == null) return 0
+		val lf = hiddenHeight(tNode.left)
+		val rg = hiddenHeight(tNode.right)
+		return kotlin.math.max(lf, rg) + 1
+	}
+
+	fun height(): Int {
+		return hiddenHeight(root)
+	}
 }
