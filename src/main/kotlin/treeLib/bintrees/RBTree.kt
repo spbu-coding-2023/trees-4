@@ -43,60 +43,38 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K
 	 * Used in add() method to balance tree :)
 	 */
 	override fun balancerAdd(treeBranch: ArrayDeque<RBNode<K, V>>) {
-		var (son, parent, grandparent) =
-			Triple(
-				treeBranch.removeFirstOrNull(),
-				treeBranch.removeFirstOrNull(),
-				treeBranch.removeFirstOrNull()
-			)
+		var son = treeBranch.removeFirstOrNull()
+		var parent = treeBranch.removeFirstOrNull()
+		var	grandparent = treeBranch.removeFirstOrNull()
 
 		while (parent != null && parent.isRed) {
-			if (parent === grandparent?.left) {
-				val uncle = grandparent.right
-				if (uncle?.isRed == true) {
-					parent.isRed = false
-					uncle.isRed = false
-					grandparent.isRed = true
+			val uncle = when {
+				parent === grandparent?.right -> grandparent.left
+				parent === grandparent?.left -> grandparent.right
+				else -> null
+			}
 
-					son = grandparent
-					parent = treeBranch.removeFirstOrNull()
-					grandparent = treeBranch.removeFirstOrNull()
-				} else /*uncle == black or null*/ {
-					if (son === parent.right) {
-						son = parent
-						parent = grandparent
-						grandparent = treeBranch.removeFirst()
-						rotateLeft(son, parent)
-					}
-					parent.isRed = false
-					grandparent.isRed = true
-					rotateRight(grandparent, treeBranch.firstOrNull())
+			if (uncle?.isRed == false) {
+				if (parent === grandparent?.right && son === parent.left) {
+					rotateRight(parent, grandparent)
+					parent = son
+					son = parent?.right
+				} else if (parent === grandparent?.left && son === parent.right) {
+					rotateLeft(parent, grandparent)
+					parent = son
+					son = parent?.left
 				}
-			} else if (parent === grandparent?.right) {
-				val uncle = grandparent.left
-				if (uncle?.isRed == true) {
-					parent.isRed = false
-					uncle.isRed = false
-					grandparent.isRed = true
-
-					son = grandparent
-					parent = treeBranch.removeFirstOrNull()
-					grandparent = treeBranch.removeFirstOrNull()
-				} else /*uncle == black or null*/ {
-					if (son === parent.left) {
-						son = parent
-						parent = grandparent
-						grandparent = treeBranch.removeFirstOrNull()
-						rotateRight(son, parent)
-					}
-					parent.isRed = false
-					if (grandparent != null) {//why safe call
-						grandparent.isRed = true
-						rotateLeft(grandparent, treeBranch.firstOrNull())
-					}
-				}
-			} else /*grandparent == null*/ {
+				parent?.isRed = false
+				grandparent?.isRed = true
+				if (parent === grandparent?.right) rotateLeft(grandparent, treeBranch.firstOrNull())
+				else if (parent === grandparent?.left) rotateRight(grandparent, treeBranch.firstOrNull())
+			} else {
 				parent.isRed = false
+				uncle?.isRed = false
+				grandparent?.isRed = true
+				son = grandparent
+				parent = treeBranch.removeFirstOrNull()
+				grandparent = treeBranch.removeFirstOrNull()
 			}
 		}
 
@@ -147,7 +125,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K
 		amountOfNodes--
 		//treeBranch.addFirst(newNode)
 		balancerRemove(treeBranch)
-		return curNode?.value
+		return curNode.value
 	}
 
 	/**
