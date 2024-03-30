@@ -15,4 +15,20 @@ abstract class TreeNode<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 		val node = other as? Node_T
 		return (node != null) && (Pair(key, value) == Pair(node.key, node.value))
 	}
+
+	internal fun attach(node: Node_T?): Boolean {
+		if (node == null) return false
+		when {
+			this > node -> left = node
+			this < node -> right = node
+			else -> return false
+		}
+		return true
+	}
+
+	internal fun moveOn(otherKey: K) = when {
+		key > otherKey -> left
+		key < otherKey -> right
+		else -> this
+	}
 }
