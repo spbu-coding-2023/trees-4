@@ -117,7 +117,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K
 	 */
 	override fun remove(key: K): V? {
 		val treeBranch = ArrayDeque<RBNode<K, V>>()
-		var curNode = root
+		val curNode = root
 		while (curNode != null) {
 			treeBranch.addFirst(curNode)
 			val nextNode = curNode.moveOn(key)

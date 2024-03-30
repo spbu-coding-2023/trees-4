@@ -8,8 +8,8 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 	override var amountOfNodes = 0
 
 	override fun remove(key: K): V? {
-		var value : V? = null
-		fun removeRec(node: AVLNode<K, V>?, key: K) : AVLNode<K, V>? {
+		var value: V? = null
+		fun removeRec(node: AVLNode<K, V>?, key: K): AVLNode<K, V>? {
 			if (node == null) return null
 			if (key < node.key) {
 				node.left = removeRec(node.left, key)
@@ -40,7 +40,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		return (node)
 	}
 
-	private fun removeMin(node: AVLNode<K, V>?) : AVLNode<K, V>? {
+	private fun removeMin(node: AVLNode<K, V>?): AVLNode<K, V>? {
 		if (node?.left == null) {
 			return node?.right
 		}
@@ -77,7 +77,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		return tree
 	}
 
-	private fun rotateLeft(nodeA: AVLNode<K, V>?) : AVLNode<K, V>? {
+	private fun rotateLeft(nodeA: AVLNode<K, V>?): AVLNode<K, V>? {
 		if (nodeA != null) {
 			if ((nodeA.right) != null) {
 				val nodeB = nodeA.right
@@ -94,7 +94,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		}
 	}
 
-	private fun rotateRight(nodeA: AVLNode<K, V>?) : AVLNode<K, V>? {
+	private fun rotateRight(nodeA: AVLNode<K, V>?): AVLNode<K, V>? {
 		if (nodeA != null) {
 			if ((nodeA.left) != null) {
 				val nodeB = nodeA.left
@@ -111,14 +111,14 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		}
 	}
 
-	private fun height(node: AVLNode<K, V>?) : Int {
+	private fun height(node: AVLNode<K, V>?): Int {
 		if (node == null) {
 			return 0
 		}
 		return node.height
 	}
 
-	private fun balanceFactor(node: AVLNode<K, V>?) : Int {
+	private fun balanceFactor(node: AVLNode<K, V>?): Int {
 		if (node == null) {
 			throw NullPointerException("Node cannot be null.")
 		}
@@ -137,7 +137,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>> {
 		}
 	}
 
-	private fun balanceNode(node: AVLNode<K, V>?) : AVLNode<K, V>? {
+	private fun balanceNode(node: AVLNode<K, V>?): AVLNode<K, V>? {
 		fixHeight(node)
 		if (balanceFactor(node) == 2) {
 			if (node != null) {
