@@ -110,28 +110,101 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K
 	fun remove(key: K): V? {
 		val treeBranch = ArrayDeque<RBNode<K, V>>()
 		var curNode = root
-		while (curNode != null) {
+
+		while (curNode != null && curNode.key != key) {
 			treeBranch.addFirst(curNode)
-			val nextNode = curNode.moveOn(key)
-			if (nextNode === curNode) {   //remove
-				val parent = treeBranch.first()
-				when {
-					curNode.left != null && curNode.right != null -> TODO()
-					curNode.left != null -> TODO("replace nodes")
-					curNode.right != null -> TODO("replace nodes")
-					else -> TODO("удалить у родителя указатель")
-				}
-				balancerRemove(treeBranch)
-				return curNode.value
-			}
+			curNode = curNode.moveOn(key)
 		}
-		return null
+
+		if (curNode == null) return null	//node with given key isn't exist
+
+		val parent = treeBranch.first()
+		when {
+			curNode == parent.right -> {
+				when {
+					curNode.left != null && curNode.right != null -> {
+						var newNode = curNode.right
+						while (newNode?.left?.left != null) newNode = newNode.left
+						parent.right = newNode?.left
+						newNode?.left = null
+					}
+					else -> parent.right = if (curNode.right != null)  curNode.right else curNode.left
+				}
+			}
+			curNode == parent.left -> {
+				when {
+					curNode.right != null && curNode.left != null -> {
+						var newNode = curNode.right
+						while (newNode?.left?.left != null) newNode = newNode.left
+						parent.left = newNode?.left
+						newNode?.left = null
+					}
+					else -> parent.left =  if (curNode.right != null)  curNode.right else curNode.left
+				}
+			}
+			else -> throw Exception("Node without a parent. What a tragedy.")
+		}
+		amountOfNodes--
+		//treeBranch.addFirst(newNode)
+		balancerRemove(treeBranch)
+		return curNode?.value
 	}
 
 	/**
 	 * Used in remove() method to balance tree :(
 	 */
 	override fun balancerRemove(treeBranch: ArrayDeque<RBNode<K, V>>) {
-		TODO("Not yet implemented")
+		val son = treeBranch.removeFirstOrNull()
+		val parent = treeBranch.removeFirstOrNull()
+
+		while (son?.isRed == false) {
+			if (son === parent?.right) {
+				val brother = parent.left
+				if (brother?.isRed == true) {
+					brother.isRed = false
+					parent.isRed = true
+					rotateLeft(parent, treeBranch.firstOrNull())
+				}
+				val nephewRight = brother?.right
+				val nephewLeft = brother?.left
+				if (nephewRight?.isRed == false && nephewLeft?.isRed == false) {
+					brother.isRed = true
+				} else {
+					if (nephewRight?.isRed == false) {
+						brother.isRed = true
+						nephewLeft?.isRed = false
+						rotateRight(brother, parent)
+					}
+					brother?.isRed = parent.isRed
+					parent.isRed = false
+					nephewRight?.isRed = false
+					rotateLeft(parent, treeBranch.firstOrNull())
+					return
+				}
+			} else if (son === parent?.left) {
+				val brother = parent.right
+				if (brother?.isRed == true) {
+					brother.isRed = false
+					parent.isRed = true
+					rotateRight(parent, treeBranch.firstOrNull())
+				}
+				val nephewRight = brother?.right
+				val nephewLeft = brother?.left
+				if (nephewRight?.isRed == false && nephewLeft?.isRed == false) {
+					brother.isRed = true
+				} else {
+					if (nephewLeft?.isRed == false) {
+						brother.isRed = true
+						nephewRight?.isRed = false
+						rotateLeft(brother, parent)
+					}
+					brother?.isRed = parent.isRed
+					parent.isRed = false
+					nephewLeft?.isRed = false
+					rotateRight(parent, treeBranch.firstOrNull())
+					return
+				}
+			}
+		}
 	}
 }
