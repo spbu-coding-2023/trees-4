@@ -111,9 +111,12 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 			}
 		}
 
-		if (removedNode === parent?.right) parent.right
-		else if (removedNode === parent?.left) parent.left = sonRemoved
 		amountOfNodes--
+		when (removedNode) {
+			parent?.right -> parent.right = sonRemoved
+			parent?.left -> parent.left = sonRemoved
+			else -> root = null   //only root doesn't have parent
+		}
 		if (sonRemoved != null && !removedNode.isRed) {
 			treeBranch.addFirst(sonRemoved)
 			balancerRemove(treeBranch)
