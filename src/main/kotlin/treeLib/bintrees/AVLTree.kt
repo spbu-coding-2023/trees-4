@@ -48,7 +48,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 		return balanceNode(node)
 	}
 
-	override fun add(key: K, value: V): V? {
+	override fun add(key: K, value: V): AVLNode<K, V>? {
 		fun addRec(node: AVLNode<K, V>?, key: K, value: V): AVLNode<K, V>? {
 			if (node == null) {
 				return AVLNode(key, value)
@@ -60,7 +60,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 			}
 			return balanceNode(node)
 		}
-		return addRec(root, key, value)?.value
+		return addRec(root, key, value)
 	}
 
 	fun initTree(data: List<Pair<K, V>>): AVLTree<K, V> {

@@ -6,7 +6,7 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 	protected abstract var root: Node_T?
 	protected abstract var amountOfNodes: Int
 
-	abstract fun add(key: K, value: V): V?
+	abstract fun add(key: K, value: V): Node_T?
 
 	fun findByKey(key: K): Node_T? {
 		var curNode = root
