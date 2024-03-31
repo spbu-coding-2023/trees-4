@@ -60,6 +60,9 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 			}
 			return balanceNode(node)
 		}
+		if (root == null) {
+			root = AVLNode(key, value)
+		}
 		return addRec(root, key, value)
 	}
 
