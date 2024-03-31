@@ -45,7 +45,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 	private fun balancerAdd(treeBranch: ArrayDeque<RBNode<K, V>>) {
 		var son = treeBranch.removeFirstOrNull()
 		var parent = treeBranch.removeFirstOrNull()
-		var	grandparent = treeBranch.removeFirstOrNull()
+		var grandparent = treeBranch.removeFirstOrNull()
 
 		while (parent != null && parent.isRed) {
 			val uncle = when {
@@ -67,7 +67,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 				parent?.isRed = false
 				grandparent?.isRed = true
 				if (parent === grandparent?.right) rotateLeft(grandparent, treeBranch.firstOrNull())
-				else if (parent === grandparent?.left) rotateRight(grandparent, treeBranch.firstOrNull())
+				else rotateRight(grandparent, treeBranch.firstOrNull())
 			} else {
 				parent.isRed = false
 				uncle?.isRed = false
@@ -119,7 +119,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 		if (removedNode === parent?.right) parent.right
 		else if (removedNode === parent?.left) parent.left = sonRemoved
 		amountOfNodes--
-		if (sonRemoved != null && removedNode.isRed == false) {
+		if (sonRemoved != null && !removedNode.isRed) {
 			treeBranch.addFirst(sonRemoved)
 			balancerRemove(treeBranch)
 		}
@@ -131,7 +131,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 	 * Used in remove() method to balance tree :(
 	 */
 	private fun balancerRemove(treeBranch: ArrayDeque<RBNode<K, V>>) {
-		var son = treeBranch.removeFirstOrNull()
+		val son = treeBranch.removeFirstOrNull()
 		var parent = treeBranch.removeFirstOrNull()
 		var grandparent = treeBranch.removeFirstOrNull()
 

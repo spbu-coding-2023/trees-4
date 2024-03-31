@@ -7,17 +7,17 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 	protected abstract var amountOfNodes: Int
 
 	abstract fun add(key: K, value: V): Node_T?
-  
-  abstract fun remove(key: K): V?
+
+	abstract fun remove(key: K): V?
 
 	fun findByKey(key: K): Node_T? {
 		var curNode = root
 		while (curNode != null)
-			curNode = when {
+		    curNode = when {
 				key > curNode.key -> curNode.right
 				key < curNode.key -> curNode.left
 				else -> return curNode
-			}
+		    }
 		return null
 	}
 
