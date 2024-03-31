@@ -5,10 +5,6 @@ import treeLib.nodes.TreeNode
 interface TreeBalancer<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> {
 	var root: Node_T?
 
-	fun balancerAdd(treeBranch: ArrayDeque<Node_T>)
-
-	fun balancerRemove(parent: Node_T?, removed: Node_T?)
-
 	fun rotateRight(node: Node_T?, parent: Node_T?) {
 		if (node == null) return
 
