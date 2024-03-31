@@ -17,7 +17,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 	 * 1. Adds node to the tree and returns VALUE,
 	 * 2. If node with given key already exist, it does nothing(check changeVAAAAAAAAAAAAAAAAAAAL() method)
 	 */
-	override fun add(key: K, value: V): V? {
+	override fun add(key: K, value: V): RBNode<K, V>? {
 		val treeBranch = ArrayDeque<RBNode<K, V>>()
 		val newNode = RBNode(key, value)
 		if (root == null) {
@@ -36,7 +36,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 		amountOfNodes++
 		treeBranch.addFirst(newNode)
 		balancerAdd(treeBranch)
-		return value
+		return newNode
 	}
 
 	/**
