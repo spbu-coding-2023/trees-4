@@ -12,8 +12,7 @@ abstract class TreeNode<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 	override fun hashCode() = Pair(key, value).hashCode()
 
 	override fun equals(other: Any?): Boolean {
-		val equals = (other as? Node_T != null) && (key == other.key) && (value == other.value)
-		return equals
+		return (other as? Node_T != null) && (key == other.key) && (value == other.value)
 	}
 
 	override fun toString() = Pair(key, value).toString()
