@@ -8,7 +8,7 @@ import treeLib.nodes.RBNode
  * Class which implements... Red-Black Tree :O
  * Takes two types: for key(K) and for value(V)
  */
-class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K, V, RBNode<K, V>> {
+class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer<K, V, RBNode<K, V>> {
 	override var root: RBNode<K, V>? = null
 	override var amountOfNodes: Int = 0
 

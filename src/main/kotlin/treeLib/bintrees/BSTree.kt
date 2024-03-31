@@ -3,7 +3,7 @@ package treeLib.bintrees
 import treeLib.bintrees.interfaces.BinTree
 import treeLib.nodes.BSTNode
 
-class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>> {
+class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	override var root: BSTNode<K, V>? = null
 	override var amountOfNodes = 1
 

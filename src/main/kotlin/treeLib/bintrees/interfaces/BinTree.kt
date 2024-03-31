@@ -2,11 +2,11 @@ package treeLib.bintrees.interfaces
 
 import treeLib.nodes.TreeNode
 
-interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Iterable<Pair<K, V>> {
-	var root: Node_T?
-	var amountOfNodes: Int
+abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Iterable<Pair<K, V>> {
+	protected abstract var root: Node_T?
+	protected abstract var amountOfNodes: Int
 
-	fun add(key: K, value: V): V?
+	abstract fun add(key: K, value: V): V?
 
 	fun findByKey(key: K): Node_T? {
 		var curNode = root
@@ -19,7 +19,7 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 		return null
 	}
 
-	fun remove(key: K): V?
+	abstract fun remove(key: K): V?
 
 	fun max(): Pair<K, V>? {
 		var curNode = root
@@ -54,7 +54,7 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 		return kotlin.math.max(lf, rg) + 1
 	}
 
-	fun height(): Int? {
+	open fun height(): Int? {
 		return countHeight(root)
 	}
 }
