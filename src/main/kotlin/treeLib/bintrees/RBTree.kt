@@ -8,7 +8,7 @@ import treeLib.nodes.RBNode
  * Class which implements... Red-Black Tree :O
  * Takes two types: for key(K) and for value(V)
  */
-class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K, V, RBNode<K, V>> {
+class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer<K, V, RBNode<K, V>> {
 	override var root: RBNode<K, V>? = null
 	override var amountOfNodes: Int = 0
 
@@ -85,7 +85,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>, TreeBalancer<K
 	 * Removes node with the same key and returns node's key and value.
 	 * Or returns null if node with the same key doesn't exist.
 	 */
-	fun remove(key: K): V? {
+	override fun remove(key: K): V? {
 		val treeBranch = ArrayDeque<RBNode<K, V>>()
 		var removedNode = if (root != null) root else return null
 		while (removedNode?.key != key) {

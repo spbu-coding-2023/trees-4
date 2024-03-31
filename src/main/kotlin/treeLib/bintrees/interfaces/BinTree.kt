@@ -2,11 +2,13 @@ package treeLib.bintrees.interfaces
 
 import treeLib.nodes.TreeNode
 
-interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Iterable<Pair<K, V>> {
-	var root: Node_T?
-	var amountOfNodes: Int
+abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Iterable<Pair<K, V>> {
+	protected abstract var root: Node_T?
+	protected abstract var amountOfNodes: Int
 
-	fun add(key: K, value: V): V?
+	abstract fun add(key: K, value: V): Node_T?
+  
+  abstract fun remove(key: K): V?
 
 	fun findByKey(key: K): Node_T? {
 		var curNode = root
@@ -53,7 +55,9 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 		root?.let { root = null }
 	}
 
-	fun countNodes(): Int = amountOfNodes
+	fun countNodes(): Int {
+		return amountOfNodes
+	}
 
 	/**
 	 * basic In-order iterator
@@ -63,4 +67,15 @@ interface BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Itera
 	fun preOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.PRE_ORDER)
 
 	fun postOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.POST_ORDER)
+
+	private fun countHeight(tNode: Node_T?): Int {
+		if (tNode == null) return 0
+		val lf = countHeight(tNode.left)
+		val rg = countHeight(tNode.right)
+		return kotlin.math.max(lf, rg) + 1
+	}
+
+	open fun height(): Int? {
+		return countHeight(root)
+	}
 }
