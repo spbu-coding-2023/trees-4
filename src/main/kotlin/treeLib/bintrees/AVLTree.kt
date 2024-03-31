@@ -64,22 +64,9 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 		}
 		if (root == null) {
 			root = AVLNode(key, value)
+			return root
 		}
 		return addRec(root, key, value)
-	}
-
-	fun initTree(data: List<Pair<K, V>>): AVLTree<K, V> {
-		val tree = AVLTree<K, V>()
-		for (element in data) {
-			if (tree.root == null) {
-				tree.root = AVLNode(element.first, element.second)
-				amountOfNodes = 1
-			} else {
-				tree.add(element.first, element.second)
-				amountOfNodes += 1
-			}
-		}
-		return tree
 	}
 
 	private fun rotateLeft(nodeA: AVLNode<K, V>?): AVLNode<K, V>? {
@@ -130,18 +117,6 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 		return height(node.right) - height(node.left)
 	}
 
-	fun isBalanced(node: AVLNode<K, V>?): Boolean {
-		if (node == null) return true
-		val lh = height(node.left)
-		val rh = height(node.right)
-
-		if (abs(balanceFactor(node)) <= 1 && isBalanced(node.left) && isBalanced(node.right)) {
-			return true
-		}
-
-		return false
-	}
-
 	private fun fixHeight(node: AVLNode<K, V>?) {
 		if (node != null) {
 			val heightLeft = height(node.left)
@@ -161,6 +136,10 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 				if (balanceFactor(node.right) < 0) {
 					node.right = rotateRight(node.right)
 				}
+				if (node == root) {
+					root = rotateLeft(node)
+					return root
+				}
 				return rotateLeft(node)
 			}
 		}
@@ -168,6 +147,10 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 			if (node != null) {
 				if (balanceFactor(node.left) > 0) {
 					node.left = rotateLeft(node.left)
+				}
+				if (node == root) {
+					root = rotateRight(node)
+					return root
 				}
 				return rotateRight(node)
 			}
