@@ -35,18 +35,18 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 		return null
 	}
 
-	fun max(): Pair<K, V>? {
+	fun max(): Node_T? {
 		var curNode = root
 		while (curNode?.right != null)
 			curNode = curNode.right
-		return if (curNode != null) Pair(curNode.key, curNode.value) else null
+		return curNode
 	}
 
-	fun min(): Pair<K, V>? {
+	fun min(): Node_T? {
 		var curNode = root
 		while (curNode?.left != null)
 			curNode = curNode.left
-		return if (curNode != null) Pair(curNode.key, curNode.value) else null
+		return curNode
 	}
 
 	open fun root(): Node_T? {
