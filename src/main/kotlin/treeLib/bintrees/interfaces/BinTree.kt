@@ -55,6 +55,7 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 
 	fun clear() {
 		root?.let { root = null }
+		amountOfNodes = 0
 	}
 
 	fun countNodes(): Int {

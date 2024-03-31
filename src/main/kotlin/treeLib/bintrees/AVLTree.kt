@@ -2,7 +2,6 @@ package treeLib.bintrees
 
 import treeLib.bintrees.interfaces.BinTree
 import treeLib.nodes.AVLNode
-import kotlin.math.abs
 
 
 class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
@@ -32,6 +31,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 			return balanceNode(node)
 		}
 		removeRec(root, key)
+		amountOfNodes -= 1
 		return value
 	}
 
@@ -64,8 +64,10 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 		}
 		if (root == null) {
 			root = AVLNode(key, value)
+			amountOfNodes += 1
 			return root
 		}
+		amountOfNodes += 1
 		return addRec(root, key, value)
 	}
 
