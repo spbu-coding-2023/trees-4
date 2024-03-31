@@ -43,38 +43,32 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 	 * Used in add() method to balance tree :)
 	 */
 	private fun balancerAdd(treeBranch: ArrayDeque<RBNode<K, V>>) {
-		var son = treeBranch.removeFirstOrNull()
+		var son = treeBranch.removeFirst()
 		var parent = treeBranch.removeFirstOrNull()
 		var grandparent = treeBranch.removeFirstOrNull()
 
-		while (parent != null && parent.isRed) {
-			val uncle = when {
-				parent === grandparent?.right -> grandparent.left
-				parent === grandparent?.left -> grandparent.right
-				else -> null
-			}
+		while (parent != null && parent.isRed && grandparent != null) {
+			val uncle = if (parent != grandparent.right) grandparent.right else grandparent.left
 
-			if (uncle?.isRed == false) {
-				if (parent === grandparent?.right && son === parent.left) {
-					rotateRight(parent, grandparent)
-					parent = son
-					son = parent?.right
-				} else if (parent === grandparent?.left && son === parent.right) {
-					rotateLeft(parent, grandparent)
-					parent = son
-					son = parent?.left
-				}
-				parent?.isRed = false
-				grandparent?.isRed = true
-				if (parent === grandparent?.right) rotateLeft(grandparent, treeBranch.firstOrNull())
-				else rotateRight(grandparent, treeBranch.firstOrNull())
-			} else {
+			if (uncle?.isRed == true) {
 				parent.isRed = false
-				uncle?.isRed = false
-				grandparent?.isRed = true
+				uncle.isRed = false
+				grandparent.isRed = true
 				son = grandparent
 				parent = treeBranch.removeFirstOrNull()
 				grandparent = treeBranch.removeFirstOrNull()
+			} else {
+				if (parent === grandparent.right && son === parent.left) {
+					rotateRight(parent, grandparent)
+					parent = son
+				} else if (parent === grandparent.left && son === parent.right) {
+					rotateLeft(parent, grandparent)
+					parent = son
+				}
+				parent.isRed = false
+				grandparent.isRed = true
+				if (parent === grandparent.right) rotateLeft(grandparent, treeBranch.firstOrNull())
+				else rotateRight(grandparent, treeBranch.firstOrNull())
 			}
 		}
 
