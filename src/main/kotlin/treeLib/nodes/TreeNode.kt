@@ -29,6 +29,6 @@ abstract class TreeNode<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 	internal fun moveOn(otherKey: K) = when {
 		key > otherKey -> left
 		key < otherKey -> right
-		else -> this
+		else -> this as? Node_T
 	}
 }
