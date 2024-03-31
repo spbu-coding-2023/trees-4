@@ -2,7 +2,7 @@ package treeLib.bintrees.interfaces
 
 import treeLib.nodes.TreeNode
 
-abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Iterable<Pair<K, V>> {
+abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : Iterable<Node_T> {
 	protected abstract var root: Node_T?
 	protected abstract var amountOfNodes: Int
 
@@ -62,11 +62,11 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 	/**
 	 * basic In-order iterator
 	 */
-	override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.IN_ORDER)
+	override fun iterator(): Iterator<Node_T> = TreeIterator(root, IterationOrder.IN_ORDER)
 
-	fun preOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.PRE_ORDER)
+	fun preOrderIterator(): Iterator<Node_T> = TreeIterator(root, IterationOrder.PRE_ORDER)
 
-	fun postOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.POST_ORDER)
+	fun postOrderIterator(): Iterator<Node_T> = TreeIterator(root, IterationOrder.POST_ORDER)
 
 	private fun countHeight(tNode: Node_T?): Int {
 		if (tNode == null) return 0

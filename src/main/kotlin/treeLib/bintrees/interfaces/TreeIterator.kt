@@ -5,7 +5,7 @@ import treeLib.nodes.TreeNode
 class TreeIterator<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 	private val root: Node_T?,
 	private val order: IterationOrder,
-	): Iterator<Pair<K, V>> {
+	): Iterator<Node_T> {
 	private val stack: ArrayDeque<Node_T> = ArrayDeque()
 
 	init {
@@ -46,8 +46,5 @@ class TreeIterator<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 
 	override fun hasNext() = stack.isNotEmpty()
 
-	override fun next(): Pair<K, V> {
-		val node = stack.removeFirst()
-		return Pair(node.key, node.value)
-	}
+	override fun next() = stack.removeFirst()
 }
