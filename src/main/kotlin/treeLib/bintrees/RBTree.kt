@@ -15,7 +15,8 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 	/**
 	 * Adds or replaces node to the tree depending on given key:
 	 * 1. Adds node to the tree and returns VALUE,
-	 * 2. If node with given key already exist, it does nothing(check changeVAAAAAAAAAAAAAAAAAAAL() method)
+	 * 2. If node with given key already exist, it does nothing
+	 * (to actually change value check changeVal)
 	 */
 	override fun add(key: K, value: V): RBNode<K, V>? {
 		val treeBranch = ArrayDeque<RBNode<K, V>>()
@@ -76,12 +77,12 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 	}
 
 	/**
-	 * Removes node with the same key and returns node's key and value.
-	 * Or returns null if node with the same key doesn't exist.
+	 * Removes node with the same key and returns node's value.
+	 * Or returns null if there's no such node.
 	 */
 	override fun remove(key: K): V? {
 		val treeBranch = ArrayDeque<RBNode<K, V>>()
-		var removedNode = if (root != null) root else return null
+		var removedNode = root
 		while (removedNode?.key != key) {
 			if (removedNode == null) return null	//node with given key doesn't exist
 			treeBranch.addFirst(removedNode)
