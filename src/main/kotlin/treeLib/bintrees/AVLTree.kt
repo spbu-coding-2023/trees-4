@@ -2,6 +2,8 @@ package treeLib.bintrees
 
 import treeLib.bintrees.interfaces.BinTree
 import treeLib.nodes.AVLNode
+import kotlin.math.abs
+
 
 class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 	override var root: AVLNode<K, V>? = null
@@ -126,6 +128,18 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 			throw NullPointerException("Node cannot be null.")
 		}
 		return height(node.right) - height(node.left)
+	}
+
+	fun isBalanced(node: AVLNode<K, V>?): Boolean {
+		if (node == null) return true
+		val lh = height(node.left)
+		val rh = height(node.right)
+
+		if (abs(balanceFactor(node)) <= 1 && isBalanced(node.left) && isBalanced(node.right)) {
+			return true
+		}
+
+		return false
 	}
 
 	private fun fixHeight(node: AVLNode<K, V>?) {
