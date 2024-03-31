@@ -35,7 +35,9 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 		return if (curNode != null) Pair(curNode.key, curNode.value) else null
 	}
 
-	fun root(): Pair<K, V>? = root?.let { Pair(it.key, it.value) }
+	open fun root(): Node_T? {
+		return root
+	}
 
 	fun clear() {
 		root?.let { root = null }
