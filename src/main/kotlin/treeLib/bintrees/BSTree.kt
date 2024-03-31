@@ -16,7 +16,7 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		return true
 	}
 
-	override fun add(key: K, value: V): V? {
+	override fun add(key: K, value: V): BSTNode<K, V>? {
 		if (root == null) root = BSTNode(key, value)
 		var x = this.root
 		while (x != null) {
@@ -35,7 +35,7 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 			} else return null
 		}
 		this.amountOfNodes += 1
-		return value
+		return null
 	}
 
 	override fun remove(key: K): V? {
@@ -83,16 +83,16 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	}
 
 
-	fun changeVal(key: K, newValue: V): Boolean {
+	override fun changeVal(key: K, newValue: V): V? {
 		var x = root
 		while (x != null) {
 			x = if (key > x.key) x.right
 			else if (key < x.key) x.left
 			else {
 				x.value = newValue
-				return true
+				return newValue
 			}
 		}
-		return false
+		return null
 	}
 }

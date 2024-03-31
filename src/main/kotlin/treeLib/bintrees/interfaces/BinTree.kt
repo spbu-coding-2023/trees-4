@@ -21,7 +21,7 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 		return null
 	}
 
-	fun changeVal(key: K, newValue: V): V? {
+	open fun changeVal(key: K, newValue: V): V? {
 		var curNode = root
 		while (curNode != null)
 			curNode = when {
