@@ -8,18 +8,32 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 
 	abstract fun add(key: K, value: V): Node_T?
 
+	abstract fun remove(key: K): V?
+
 	fun findByKey(key: K): Node_T? {
+		var curNode = root
+		while (curNode != null)
+		    curNode = when {
+				key > curNode.key -> curNode.right
+				key < curNode.key -> curNode.left
+				else -> return curNode
+		    }
+		return null
+	}
+
+	fun changeVal(key: K, newValue: V): V? {
 		var curNode = root
 		while (curNode != null)
 			curNode = when {
 				key > curNode.key -> curNode.right
 				key < curNode.key -> curNode.left
-				else -> return curNode
+				else -> {
+					curNode.value = newValue
+					return newValue
+				}
 			}
 		return null
 	}
-
-	abstract fun remove(key: K): V?
 
 	fun max(): Pair<K, V>? {
 		var curNode = root
@@ -47,7 +61,14 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 		return amountOfNodes
 	}
 
-	override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root)
+	/**
+	 * basic In-order iterator
+	 */
+	override fun iterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.IN_ORDER)
+
+	fun preOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.PRE_ORDER)
+
+	fun postOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.POST_ORDER)
 
 	private fun countHeight(tNode: Node_T?): Int {
 		if (tNode == null) return 0
