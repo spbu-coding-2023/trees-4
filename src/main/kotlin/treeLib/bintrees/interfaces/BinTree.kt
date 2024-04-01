@@ -13,11 +13,11 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 	fun findByKey(key: K): Node_T? {
 		var curNode = root
 		while (curNode != null)
-		    curNode = when {
+			curNode = when {
 				key > curNode.key -> curNode.right
 				key < curNode.key -> curNode.left
 				else -> return curNode
-		    }
+			}
 		return null
 	}
 
@@ -80,7 +80,7 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 	}
 
 
-	fun height(): Int? {
+	open fun height(): Int? {
 		return countHeight(root)
 	}
 }

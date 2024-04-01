@@ -43,8 +43,8 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		var count = 0
 		var curNode: BSTNode<K, V>? = null
 		var parent = this.findParent(key)
-		if(parent == null) return null
-		if(parent.right != null && parent.right?.key == key) curNode = parent.right
+		if (parent == null) return null
+		if (parent.right != null && parent.right?.key == key) curNode = parent.right
 		else curNode = parent.left
 		if (curNode?.right != null) count++
 		if (curNode?.left != null) count++
@@ -75,19 +75,17 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	}
 
 
-
-	fun findParent(key: K): BSTNode<K, V>?{
+	fun findParent(key: K): BSTNode<K, V>? {
 		var parent = this.root
-		if(parent == null || root!!.key == key) return null
-		while(parent?.isThereChild() == true){
-			if( (parent.right != null && parent.right?.key == key) || (parent.left != null && parent.left?.key == key)) return parent
-			else{
-				if(key > parent.key){
-					if(parent.right == null) return null
+		if (parent == null || root!!.key == key) return null
+		while (parent?.isThereChild() == true) {
+			if ((parent.right != null && parent.right?.key == key) || (parent.left != null && parent.left?.key == key)) return parent
+			else {
+				if (key > parent.key) {
+					if (parent.right == null) return null
 					parent = parent.right
-				}
-				else{
-					if(parent.left == null) return null
+				} else {
+					if (parent.left == null) return null
 					parent = parent.left
 				}
 			}
@@ -95,19 +93,19 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		return null
 	}
 
-	fun deleteSubTree(key: K): Boolean{
+	fun deleteSubTree(key: K): Boolean {
 		var parent: BSTNode<K, V>? = this.findParent(key)
-		if(parent == null) return false
-		if(parent.right != null && parent.right?.key == key) parent.right = null
+		if (parent == null) return false
+		if (parent.right != null && parent.right?.key == key) parent.right = null
 		else parent.left = null
 		return true
 	}
 
-	fun getSubTree(key: K): BSTree<K, V>?{
+	fun getSubTree(key: K): BSTree<K, V>? {
 		var parent: BSTNode<K, V>? = this.findParent(key)
 		var child: BSTree<K, V> = BSTree()
-		if(parent == null) return null
-		if(parent.right != null && parent.right?.key == key) child.add(key, parent.right!!.value)
+		if (parent == null) return null
+		if (parent.right != null && parent.right?.key == key) child.add(key, parent.right!!.value)
 		else child.add(key, parent.left!!.value)
 		return child
 

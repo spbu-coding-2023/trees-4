@@ -27,7 +27,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 			while (curNode != null) {
 				treeBranch.addFirst(curNode)
 				val nextNode = curNode.moveOn(key)
-				if (nextNode === curNode) return null	//node with given key already exist
+				if (nextNode === curNode) return null        //node with given key already exist
 				curNode = nextNode
 			}
 			val parent = treeBranch.first()
@@ -89,7 +89,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 		val treeBranch = ArrayDeque<RBNode<K, V>>()
 		var removedNode = if (root != null) root else return null
 		while (removedNode?.key != key) {
-			if (removedNode == null) return null	//node with given key doesn't exist
+			if (removedNode == null) return null        //node with given key doesn't exist
 			treeBranch.addFirst(removedNode)
 			removedNode = removedNode.moveOn(key)
 		}
@@ -102,7 +102,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 			sonRight != null && sonLeft == null -> sonRight
 			sonRight == null && sonLeft != null -> sonLeft
 			else /*sonRight and sonLeft != null*/ -> {
-				val replace = removedNode	//Will rewrite this node with other one
+				val replace = removedNode        //Will rewrite this node with other one
 				treeBranch.addFirst(replace)
 				removedNode = sonRight
 				while (removedNode?.left != null) {
