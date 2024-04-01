@@ -39,11 +39,11 @@ jobs:
       - name: Run With Coverage
         run: |
           chmod +x gradlew
-          ./gradlew testCoverage
+          ./gradlew test
 
       - name: Add coverage to PR
         id: jacoco
-        uses: madrapps/jacoco-report@v1.6.1
+      - uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: |
             ${{ github.workspace }}/**/build/reports/jacoco/prodNormalDebugCoverage/prodNormalDebugCoverage.xml,
