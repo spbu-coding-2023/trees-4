@@ -21,7 +21,7 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 		return null
 	}
 
-	fun changeVal(key: K, newValue: V): V? {
+	open fun changeVal(key: K, newValue: V): V? {
 		var curNode = root
 		while (curNode != null)
 			curNode = when {
@@ -35,24 +35,27 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 		return null
 	}
 
-	fun max(): Pair<K, V>? {
+	fun max(): Node_T? {
 		var curNode = root
 		while (curNode?.right != null)
 			curNode = curNode.right
-		return if (curNode != null) Pair(curNode.key, curNode.value) else null
+		return curNode
 	}
 
-	fun min(): Pair<K, V>? {
+	fun min(): Node_T? {
 		var curNode = root
 		while (curNode?.left != null)
 			curNode = curNode.left
-		return if (curNode != null) Pair(curNode.key, curNode.value) else null
+		return curNode
 	}
 
-	fun root(): Pair<K, V>? = root?.let { Pair(it.key, it.value) }
+	open fun root(): Node_T? {
+		return root
+	}
 
 	fun clear() {
 		root?.let { root = null }
+		amountOfNodes = 0
 	}
 
 	fun countNodes(): Int {

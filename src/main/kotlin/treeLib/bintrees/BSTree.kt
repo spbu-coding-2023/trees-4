@@ -24,6 +24,7 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 				if (curNode.right == null) {
 					curNode.right = BSTNode(key, value)
 					return curNode.right
+
 				}
 				curNode = curNode.right
 			} else if (key < curNode.key) {
@@ -74,6 +75,7 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	}
 
 
+
 	fun findParent(key: K): BSTNode<K, V>?{
 		var parent = this.root
 		if(parent == null || root!!.key == key) return null
@@ -108,5 +110,6 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		if(parent.right != null && parent.right?.key == key) child.add(key, parent.right!!.value)
 		else child.add(key, parent.left!!.value)
 		return child
+
 	}
 }
