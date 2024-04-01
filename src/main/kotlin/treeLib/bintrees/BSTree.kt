@@ -5,33 +5,34 @@ import treeLib.nodes.BSTNode
 
 class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	override var root: BSTNode<K, V>? = null
-	override var amountOfNodes = 1
+	override var amountOfNodes = 0
 
 
 	fun addPairs(keys: List<K>, values: List<V>): Boolean {
 		if (keys.size != values.size) return false
-		for (i in keys.indices) {
-			this.add(keys[i], values[i])
+		for (curKey in keys.indices) {
+			this.add(keys[curKey], values[curKey])
 		}
 		return true
 	}
 
 	override fun add(key: K, value: V): BSTNode<K, V>? {
-		if (root == null) root = BSTNode(key, value)
-		var x = this.root
-		while (x != null) {
-			if (key > x.key) {
-				if (x.right == null) {
-					x.right = BSTNode(key, value)
-					break
+		if (root == null) this.root = BSTNode(key, value)
+		var curNode = this.root
+		while (curNode != null) {
+			if (key > curNode.key) {
+				if (curNode.right == null) {
+					curNode.right = BSTNode(key, value)
+					return curNode.right
+
 				}
-				x = x.right
-			} else if (key < x.key) {
-				if (x.left == null) {
-					x.left = BSTNode(key, value)
-					break
+				curNode = curNode.right
+			} else if (key < curNode.key) {
+				if (curNode.left == null) {
+					curNode.left = BSTNode(key, value)
+					return curNode.left
 				}
-				x = x.left
+				curNode = curNode.left
 			} else return null
 		}
 		this.amountOfNodes += 1
@@ -39,60 +40,76 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	}
 
 	override fun remove(key: K): V? {
-		var x: BSTNode<K, V>? = root
-		var parent_x: BSTNode<K, V>? = null
 		var count = 0
-		while (x != null) {
-			if (key == x.key) {
-				break
-			}
-			parent_x = x
-			x = if (key > x.key) {
-				x.right
-			} else {
-				x.left
-			}
-		}
-		if (x == null || parent_x == null) return null
-		if (x.right != null) count++
-		if (x.left != null) count++
+		var curNode: BSTNode<K, V>? = null
+		var parent = this.findParent(key)
+		if(parent == null) return null
+		if(parent.right != null && parent.right?.key == key) curNode = parent.right
+		else curNode = parent.left
+		if (curNode?.right != null) count++
+		if (curNode?.left != null) count++
 		if (count == 0) {
-			if (parent_x.right === x) parent_x.right = null
-			else parent_x.left = null
+			if (parent.right === curNode) parent.right = null
+			else parent.left = null
 		} else if (count == 1) {
-			if (x.left == null) {
-				if (parent_x.right === x) parent_x.right = x.right
-				else parent_x.left = x.right
+			if (curNode?.left == null) {
+				if (parent.right === curNode) parent.right = curNode?.right
+				else parent.left = curNode?.right
 			} else {
-				if (parent_x.right === x) parent_x.right = x.left
-				else parent_x.left = x.left
+				if (parent.right === curNode) parent.right = curNode.left
+				else parent.left = curNode.left
 			}
 		} else {
-			var child_x = x.right
-			var parent_child_x = x
-			while (child_x!!.left != null) {
-				if (child_x.left!!.left == null) parent_child_x = child_x
-				child_x = child_x.left
+			var child = curNode?.right
+			var parent_child = curNode
+			while (child!!.left != null) {
+				if (child.left!!.left == null) parent_child = child
+				child = child.left
 			}
-			x.key = child_x.key
-			x.value = child_x.value
-			parent_child_x!!.left = child_x.right
+			curNode?.key = child.key
+			curNode?.value = child.value
+			parent_child!!.left = child.right
 		}
 		this.amountOfNodes -= 1
-		return null
+		return curNode?.value
 	}
 
 
-	override fun changeVal(key: K, newValue: V): V? {
-		var x = root
-		while (x != null) {
-			x = if (key > x.key) x.right
-			else if (key < x.key) x.left
-			else {
-				x.value = newValue
-				return newValue
+
+	fun findParent(key: K): BSTNode<K, V>?{
+		var parent = this.root
+		if(parent == null || root!!.key == key) return null
+		while(parent?.isThereChild() == true){
+			if( (parent.right != null && parent.right?.key == key) || (parent.left != null && parent.left?.key == key)) return parent
+			else{
+				if(key > parent.key){
+					if(parent.right == null) return null
+					parent = parent.right
+				}
+				else{
+					if(parent.left == null) return null
+					parent = parent.left
+				}
 			}
 		}
 		return null
+	}
+
+	fun deleteSubTree(key: K): Boolean{
+		var parent: BSTNode<K, V>? = this.findParent(key)
+		if(parent == null) return false
+		if(parent.right != null && parent.right?.key == key) parent.right = null
+		else parent.left = null
+		return true
+	}
+
+	fun getSubTree(key: K): BSTree<K, V>?{
+		var parent: BSTNode<K, V>? = this.findParent(key)
+		var child: BSTree<K, V> = BSTree()
+		if(parent == null) return null
+		if(parent.right != null && parent.right?.key == key) child.add(key, parent.right!!.value)
+		else child.add(key, parent.left!!.value)
+		return child
+
 	}
 }

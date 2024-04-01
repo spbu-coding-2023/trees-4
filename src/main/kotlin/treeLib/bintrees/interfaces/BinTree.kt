@@ -71,14 +71,16 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 
 	fun postOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.POST_ORDER)
 
+
 	private fun countHeight(tNode: Node_T?): Int {
 		if (tNode == null) return 0
-		val lf = countHeight(tNode.left)
-		val rg = countHeight(tNode.right)
-		return kotlin.math.max(lf, rg) + 1
+		val leftChild = countHeight(tNode.left)
+		val rightChild = countHeight(tNode.right)
+		return kotlin.math.max(leftChild, rightChild) + 1
 	}
 
-	open fun height(): Int? {
+
+	fun height(): Int? {
 		return countHeight(root)
 	}
 }
