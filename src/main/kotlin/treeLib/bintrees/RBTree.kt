@@ -99,15 +99,15 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 			else /*sonRight and sonLeft != null*/ -> {
 				val replace = removedNode	//Will rewrite this node with other one
 				treeBranch.addFirst(replace)
-				removedNode = sonRight
-				while (removedNode?.left != null) {
+				removedNode = sonLeft
+				while (removedNode?.right != null) {
 					treeBranch.addFirst(removedNode)
-					removedNode = removedNode.left
+					removedNode = removedNode.right
 				}
 				parent = treeBranch.first()
 				replace.key = removedNode?.key ?: throw Exception("well...")
 				replace.value = removedNode?.value ?: throw Exception("that's bad")
-				removedNode.right
+				removedNode.left
 			}
 		}
 
