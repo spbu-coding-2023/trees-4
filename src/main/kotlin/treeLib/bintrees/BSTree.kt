@@ -5,18 +5,18 @@ import treeLib.nodes.BSTNode
 
 class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	override var root: BSTNode<K, V>? = null
-	override var amountOfNodes = 1
+	override var amountOfNodes = 0
 
 
 	fun addPairs(keys: List<K>, values: List<V>): Boolean {
 		if (keys.size != values.size) return false
 		for (curKey in keys.indices) {
-			this.add(keys[currentKey], values[currentKey])
+			this.add(keys[curKey], values[curKey])
 		}
 		return true
 	}
 
-	override fun add(key: K, value: V): Node_T? {
+	override fun add(key: K, value: V): BSTNode<K, V>? {
 		if (root == null) this.root = BSTNode(key, value)
 		var curNode = this.root
 		while (curNode != null) {
@@ -43,55 +43,42 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		var curNode: BSTNode<K, V>? = null
 		var parent = this.findParent(key)
 		if(parent == null) return null
-		if(parent.right != null && parent.right.key == key) curNode = parent.right
+		if(parent.right != null && parent.right?.key == key) curNode = parent.right
 		else curNode = parent.left
-		if (curNode.right != null) count++
-		if (curNode.left != null) count++
+		if (curNode?.right != null) count++
+		if (curNode?.left != null) count++
 		if (count == 0) {
 			if (parent.right === curNode) parent.right = null
 			else parent.left = null
 		} else if (count == 1) {
-			if (curNode.left == null) {
-				if (parent.right === x) parent_x.right = curNode.right
-				else parent.left = curNode.right
+			if (curNode?.left == null) {
+				if (parent.right === curNode) parent.right = curNode?.right
+				else parent.left = curNode?.right
 			} else {
 				if (parent.right === curNode) parent.right = curNode.left
 				else parent.left = curNode.left
 			}
 		} else {
-			var child = curNode.right
+			var child = curNode?.right
 			var parent_child = curNode
 			while (child!!.left != null) {
 				if (child.left!!.left == null) parent_child = child
 				child = child.left
 			}
-			curNode.key = child.key
-			curNode.value = child.value
+			curNode?.key = child.key
+			curNode?.value = child.value
 			parent_child!!.left = child.right
 		}
 		this.amountOfNodes -= 1
-		return curNode.value
+		return curNode?.value
 	}
 
 
-	fun changeVal(key: K, newValue: V): Boolean {
-		var curNode = this.root
-		while (curNode != null) {
-			curNode = if (key > curNode.key) curNode.right
-			else if (key < curNode.key) curNode.left
-			else {
-				curNode.value = newValue
-				return true
-			}
-		}
-		return false
-	}
-
-	fun findParent(key: K): Node_T?{
+	fun findParent(key: K): BSTNode<K, V>?{
 		var parent = this.root
-		if(parent == null || root.key == key) return null
-		while(parent.isThereChild == true){
-			if( (parent.right != null && parent.right.key == key) || (parent.left != null && parent.left.key == key)) return parent
+		if(parent == null || root!!.key == key) return null
+		while(parent?.isThereChild() == true){
+			if( (parent.right != null && parent.right?.key == key) || (parent.left != null && parent.left?.key == key)) return parent
 			else{
 				if(key > parent.key){
 					if(parent.right == null) return null
@@ -103,12 +90,13 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 				}
 			}
 		}
+		return null
 	}
 
 	fun deleteSubTree(key: K): Boolean{
 		var parent: BSTNode<K, V>? = this.findParent(key)
 		if(parent == null) return false
-		if(parent.right != null && parent.right.key == key) parent.right = null
+		if(parent.right != null && parent.right?.key == key) parent.right = null
 		else parent.left = null
 		return true
 	}
@@ -117,8 +105,8 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		var parent: BSTNode<K, V>? = this.findParent(key)
 		var child: BSTree<K, V> = BSTree()
 		if(parent == null) return null
-		if(parent.right != null && parent.right.key == key) child.add(key, parent.right.value)
-		else child.add(key, parent.left.value)
+		if(parent.right != null && parent.right?.key == key) child.add(key, parent.right!!.value)
+		else child.add(key, parent.left!!.value)
 		return child
 	}
 }

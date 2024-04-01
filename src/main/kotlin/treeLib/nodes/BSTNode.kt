@@ -8,6 +8,6 @@ class BSTNode<K : Comparable<K>, V>(
 ) : TreeNode<K, V, BSTNode<K, V>>(key, value, right, left){
 	internal fun isThereChild(): Boolean{
 		if(this.left != null || this.right != null) return true
-		else false
+		else return false
 	}
 }

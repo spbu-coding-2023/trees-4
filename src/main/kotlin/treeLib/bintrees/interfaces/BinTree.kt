@@ -77,7 +77,7 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 	}
 
 
-	fun height(): Int {
+	fun height(): Int? {
 		return countHeight(root)
 	}
 }
