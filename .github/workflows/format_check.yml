@@ -1,5 +1,5 @@
 ## 1
-name: detekt
+name: Run detekt
 ## 2
 on:
  push:
