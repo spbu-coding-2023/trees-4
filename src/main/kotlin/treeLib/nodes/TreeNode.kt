@@ -19,6 +19,10 @@ abstract class TreeNode<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 
 	fun toPair(): Pair<K, V> = Pair(key, value)
 
+	fun key(): K = key
+
+	fun value(): V = value
+
 	internal fun attach(node: Node_T?): Boolean {
 		if (node == null) return false
 		when {
