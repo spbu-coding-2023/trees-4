@@ -3,12 +3,10 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import treeLib.bintrees.RBTree
 import treeLib.nodes.RBNode
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class RBTreeTest {
-    private var emptyTree = RBTree<Int, Int>()
+    var emptyTree = RBTree<Int, Int>()
 
     @BeforeEach
     fun init() {
@@ -127,71 +125,162 @@ class RBTreeTest {
     @Nested
     @DisplayName("Remove method tests")
     inner class RemoveMethod {
+        var tree3Node = RBTree<Int, Int>()
+        var bft15 = RBTree<Int, Int>()
+
+        @BeforeEach
+        fun initTree() {
+            tree3Node = RBTree()
+            tree3Node.add(0, 0)
+            tree3Node.add(10, 10)
+            tree3Node.add(-10, -10)
+
+            bft15 = RBTree()    //15 node tree (balanced)
+            var k = 16
+            for (i in listOf(1, 2, 4, 8)) {  //amount of nodes on level
+                for (j in 0..<i)
+                    bft15.add(k / 2 + k * j, k / 2+ k * j)
+                k /= 2
+            }
+        }
+
         @Test
         @DisplayName("Remove from empty tree")
         fun removeEmpty() {
-            assertEquals(null, emptyTree.remove(Int.MAX_VALUE))
+            val removeResult = emptyTree.remove(Int.MAX_VALUE)
+            assertNull(removeResult)
+            assertNull(emptyTree.root)
         }
 
         @Test
         @DisplayName("Remove nonexistent node")
         fun removeNothing() {
-            emptyTree.add(1, 1)
-            emptyTree.add(2, 2)
-            emptyTree.add(3, 3)
-            emptyTree.add(4, 4)
-            assertEquals(null, emptyTree.remove(0))
+            val removeResult = tree3Node.remove(999)
+            assertNull(removeResult)
+            assertEquals(RBNode(0, 0), tree3Node.root)
+            assertEquals(RBNode(10, 10), tree3Node.root!!.right)
+            assertEquals(RBNode(-10, -10), tree3Node.root!!.left)
         }
 
         @Test
-        @DisplayName("Remove root")
+        @DisplayName("Remove root without children")
         fun removeRoot() {
             emptyTree.add(1, 1)
-            val root = emptyTree.remove(1)
-            assertEquals(1, root)
+            val removeResult = emptyTree.remove(1)
+            assertEquals(1, removeResult)
             assertEquals(null, emptyTree.root())
         }
 
         @Test
+        @DisplayName("Remove root with children")
+        fun removeChildfull() {
+            val removeResult = tree3Node.remove(0)
+            assertEquals(0, removeResult)
+            assertEquals(RBNode(-10, -10), tree3Node.root)
+            assertEquals(RBNode(10, 10), tree3Node.root!!.right)
+        }
+
+
+        @Test
         @DisplayName("Remove node without children")
-        fun remove1R() {
+        fun removeWithoutChildren() {
             emptyTree.add(0, 0)
-            emptyTree.add(1, 999)
-            assertEquals(999, emptyTree.remove(1))
+            emptyTree.add(10, 999)
+            assertEquals(999, emptyTree.remove(10))
             assertTrue { emptyTree.root!!.right == null && emptyTree.root!!.left == null }
         }
 
         @Test
-        @DisplayName("Remove node without children")
+        @DisplayName("Remove node with child, right ver")
+        fun removeWithChildR() {
+            tree3Node.add(20, 20)
+            val removeResult = tree3Node.remove(10)
+            assertEquals(10, removeResult)
+            val root = tree3Node.root
+            assertTrue { !root!!.right!!.isRed }
+            assertEquals(RBNode(20, 20), root!!.right)
+        }
+
+        @Test
+        @DisplayName("Remove node with child, left ver")
+        fun removeWithChildL() {
+            tree3Node.add(-20, -20)
+            val removeResult = tree3Node.remove(-10)
+            assertEquals(-10, removeResult)
+            val root = tree3Node.root
+            assertTrue { !root!!.left!!.isRed }
+            assertEquals(RBNode(-20, -20), root!!.left)
+        }
+
+        @Test
+        @DisplayName("Remove node with two children")
+        fun removeWithChildren() {
+            val removeResult = bft15.remove(8)
+            assertEquals(8, removeResult)
+            val  root = bft15.root
+            assertEquals(RBNode(7, 7), root)
+            assertNull(root!!.left!!.right!!.right)
+        }
+
+        @Test
+        @DisplayName("Son of removed node has red brother, right ver")
         fun remove1L() {
-            emptyTree.add(0, 0)
-            emptyTree.add(-1, 666)
-            assertEquals(666, emptyTree.remove(-1))
-            assertTrue { emptyTree.root!!.right == null && emptyTree.root!!.left == null }
+            bft15.add(16, 16)
+            bft15.remove(9)
+            bft15.remove(11)
+            val removeResult =  bft15.remove(10)
+            assertEquals(10, removeResult)
+            val root = bft15.root
+            assertTrue { !root!!.right!!.isRed }
+            assertTrue { !root!!.right!!.left!!.isRed }
+            assertTrue { root!!.right!!.left!!.right!!.isRed }
+            assertTrue { !root!!.right!!.right!!.isRed }
+            assertTrue { root!!.right!!.right!!.right!!.isRed }
         }
 
         @Test
-        @DisplayName("")
+        @DisplayName("Son of removed node has red brother, left ver")
+        fun remove1R() {
+            bft15.add(0, 0)
+            bft15.remove(5)
+            bft15.remove(7)
+            val removeResult =  bft15.remove(6)
+            assertEquals(6, removeResult)
+            val root = bft15.root
+            assertTrue { !root!!.left!!.isRed }
+            assertTrue { !root!!.left!!.right!!.isRed }
+            assertTrue { root!!.left!!.right!!.left!!.isRed }
+            assertTrue { !root!!.left!!.left!!.isRed }
+            assertTrue { root!!.left!!.left!!.left!!.isRed }
+        }
+
+        @Test
+        @DisplayName("Black brother don't have children, right ver")
         fun remove2R() {
+            bft15.add(16, 16)
+            bft15.remove(16)
+            val removeResult = bft15.remove(15)
+            assertEquals(15, removeResult)
+            val root = bft15.root
+            assertTrue { !root!!.right!!.right!!.isRed }
+            assertNull(root!!.right!!.right!!.right)
+            assertTrue { root.right!!.right!!.left!!.isRed }
         }
 
         @Test
-        @DisplayName("")
+        @DisplayName("Black brother don't have children, left ver")
         fun remove2L() {
-
+            bft15.add(0, 0)
+            bft15.remove(0)
+            val removeResult = bft15.remove(1)
+            assertEquals(1, removeResult)
+            val root = bft15.root
+            assertTrue { !root!!.left!!.left!!.isRed }
+            assertNull(root!!.left!!.left!!.left)
+            assertTrue { root.left!!.left!!.right!!.isRed }
         }
 
-        @Test
-        @DisplayName("")
-        fun remove3R() {
 
-        }
-
-        @Test
-        @DisplayName("")
-        fun remove3L() {
-
-        }
 
         @Test
         @DisplayName("")
