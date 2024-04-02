@@ -3,6 +3,7 @@ package treeLib.bintrees
 import treeLib.bintrees.interfaces.BinTree
 import treeLib.nodes.AVLNode
 
+
 class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 	override var root: AVLNode<K, V>? = null
 	override var amountOfNodes = 0
@@ -30,6 +31,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 			return balanceNode(node)
 		}
 		removeRec(root, key)
+		amountOfNodes -= 1
 		return value
 	}
 
@@ -37,7 +39,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 		if (node?.left != null) {
 			return findMin(node.left)
 		}
-		return (node)
+		return node
 	}
 
 	private fun removeMin(node: AVLNode<K, V>?): AVLNode<K, V>? {
@@ -60,26 +62,18 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 			}
 			return balanceNode(node)
 		}
-		return addRec(root, key, value)
-	}
-
-	fun initTree(data: List<Pair<K, V>>): AVLTree<K, V> {
-		val tree = AVLTree<K, V>()
-		for (element in data) {
-			if (tree.root == null) {
-				tree.root = AVLNode(element.first, element.second)
-				amountOfNodes = 1
-			} else {
-				tree.add(element.first, element.second)
-				amountOfNodes += 1
-			}
+		if (root == null) {
+			root = AVLNode(key, value)
+			amountOfNodes += 1
+			return root
 		}
-		return tree
+		amountOfNodes += 1
+		return addRec(root, key, value)
 	}
 
 	private fun rotateLeft(nodeA: AVLNode<K, V>?): AVLNode<K, V>? {
 		if (nodeA != null) {
-			if ((nodeA.right) != null) {
+			if (nodeA.right != null) {
 				val nodeB = nodeA.right
 				nodeA.right = nodeB?.left
 				nodeB?.left = nodeA
@@ -96,7 +90,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 
 	private fun rotateRight(nodeA: AVLNode<K, V>?): AVLNode<K, V>? {
 		if (nodeA != null) {
-			if ((nodeA.left) != null) {
+			if (nodeA.left != null) {
 				val nodeB = nodeA.left
 				nodeA.left = nodeB?.right
 				nodeB?.right = nodeA
@@ -144,6 +138,10 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 				if (balanceFactor(node.right) < 0) {
 					node.right = rotateRight(node.right)
 				}
+				if (node == root) {
+					root = rotateLeft(node)
+					return root
+				}
 				return rotateLeft(node)
 			}
 		}
@@ -152,6 +150,10 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 				if (balanceFactor(node.left) > 0) {
 					node.left = rotateLeft(node.left)
 				}
+				if (node == root) {
+					root = rotateRight(node)
+					return root
+				}
 				return rotateRight(node)
 			}
 		}
@@ -159,10 +161,10 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 	}
 
 	override fun height(): Int? {
-		if (root == null) {
-			return 0
+		return if (root == null) {
+			0
 		} else {
-			return root?.height
+			root?.height
 		}
 	}
 }

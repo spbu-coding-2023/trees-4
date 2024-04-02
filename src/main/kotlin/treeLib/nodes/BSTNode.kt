@@ -5,4 +5,8 @@ class BSTNode<K : Comparable<K>, V>(
 	value: V,
 	right: BSTNode<K, V>? = null,
 	left: BSTNode<K, V>? = null
-) : TreeNode<K, V, BSTNode<K, V>>(key, value, right, left)
+) : TreeNode<K, V, BSTNode<K, V>>(key, value, right, left) {
+	internal fun isThereChild(): Boolean {
+		return this.left != null || this.right != null
+	}
+}
