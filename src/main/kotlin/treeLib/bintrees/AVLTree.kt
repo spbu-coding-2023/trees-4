@@ -26,6 +26,9 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 				val min = findMin(nodeB)
 				min?.right = removeMin(nodeB)
 				min?.left = nodeA
+				if (root?.key == key){
+					root = min
+				}
 				return balanceNode(min)
 			}
 			return balanceNode(node)

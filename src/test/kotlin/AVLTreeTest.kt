@@ -56,11 +56,18 @@ class AVLTreeTest {
 		}
 
 		@Test
-		fun removeRoot() {
+		fun removeOnRoot() {
 			val key : Int? = tree.root()?.key
 			if (key != null) {
 				tree.remove(key)
 				assertNotNull(tree.root())
+				for (i in 0..10) {
+					if (i == key) {
+						assertNull(tree.findByKey(key))
+					} else {
+						assertNotNull(tree.findByKey(i))
+					}
+				}
 			} else {
 				fail()
 			}
@@ -76,7 +83,7 @@ class AVLTreeTest {
 		}
 
 		@Test
-		fun removeNodeWithChildren(){
+		fun removeNodeWithTwoChildren(){
 			tree.remove(7)
 			assertNull(tree.findByKey(7))
 			for (i in 0..10) {
@@ -89,6 +96,9 @@ class AVLTreeTest {
 		@Test
 		fun removeNonExistentNode() {
 			assertNull(tree.remove(999))
+			for (i in 0..10) {
+				assertNotNull(tree.findByKey(i))
+			}
 		}
 	}
 
@@ -136,6 +146,15 @@ class AVLTreeTest {
 		fun afterRemoveAVLIsBalanced() {
 			tree.root()?.left?.let { tree.remove(it.key) }
 			assertTrue(isBalanced(tree.root()))
+		}
+
+		@Test
+		fun afterRootRemoveAVLIsBalanced(){
+			val key : Int? = tree.root()?.key
+			if (key != null) {
+				tree.remove(key)
+				assertTrue(isBalanced(tree.root()))
+			}
 		}
 	}
 
