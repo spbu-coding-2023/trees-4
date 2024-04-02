@@ -8,7 +8,6 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	override var root: BSTNode<K, V>? = null
 	override var amountOfNodes = 0
 
-
 	fun addPairs(vararg pairs: Pair<K, V>): Boolean {
 		for(pair in pairs){
 			if( this.add(pair.first, pair.second) == null ) return false
@@ -56,19 +55,28 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		var parent = this.findParent(key)
 		if(this.root?.key == key) parent = BSTNode(root!!.key, root!!.value, root)
 		if(parent == null) return null
-		if(parent.right != null && parent.right?.key == key) curNode = parent.right
-		else curNode = parent.left
+		curNode = if(parent.right != null && parent.right?.key == key) parent.right
+		else parent.left
 		if (curNode?.right != null) count++
 		if (curNode?.left != null) count++
 		if (count == 0) {
-			if (parent.right === curNode) parent.right = null
+			if (parent.right === curNode){
+				if(curNode == root) this.root = null
+				else parent.right = null
+			}
 			else parent.left = null
 		} else if (count == 1) {
 			if (curNode?.left == null) {
-				if (parent.right === curNode) parent.right = curNode?.right
+				if (parent.right === curNode){
+					if(curNode == root) this.root = root?.right
+					else parent.right = curNode?.right
+				}
 				else parent.left = curNode?.right
 			} else {
-				if (parent.right === curNode) parent.right = curNode.left
+				if (parent.right === curNode){
+					if(curNode == root) this.root = this.root?.left
+					else parent.right = curNode.left
+				}
 				else parent.left = curNode.left
 			}
 		} else {
@@ -111,20 +119,32 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		val parent: BSTNode<K, V>? = this.findParent(key)
 		if(parent == null) return false
 		if(parent.right != null && parent.right?.key == key) parent.right = null
-
 		else parent.left = null
+		var nodes = 0
+		for(i in this) nodes++
+		amountOfNodes = nodes
 		return true
 	}
 
 
 	fun getSubTree(key: K): BSTree<K, V>?{
 		val parent: BSTNode<K, V>? = this.findParent(key)
-		val child: BSTree<K, V> = BSTree()
+		val childTree: BSTree<K, V> = BSTree()
 		if(parent == null) return null
 		//На будущее, нужно добавить детей к child.add()
-		if(parent.right != null && parent.right?.key == key) child.add(key, parent.right!!.value)
-
-		else child.add(key, parent.left!!.value)
-		return child
+		var child: BSTNode<K, V>? = null
+		if(parent.right != null && parent.right?.key == key){
+			child = childTree.add(key, parent.right!!.value)
+			child?.right = parent.right!!.right
+			child?.left = parent.right!!.left
+		} else {
+			child = childTree.add(key, parent.left!!.value)
+			child?.right = parent.left!!.right
+			child?.left = parent.left!!.left
+		}
+		var nodes = 0
+		for(i in childTree) nodes++
+		childTree.amountOfNodes = nodes
+		return childTree
 	}
 }
