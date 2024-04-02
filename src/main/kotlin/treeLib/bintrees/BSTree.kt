@@ -119,20 +119,32 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		val parent: BSTNode<K, V>? = this.findParent(key)
 		if(parent == null) return false
 		if(parent.right != null && parent.right?.key == key) parent.right = null
-
 		else parent.left = null
+		var nodes = 0
+		for(i in this) nodes++
+		amountOfNodes = nodes
 		return true
 	}
 
 
 	fun getSubTree(key: K): BSTree<K, V>?{
 		val parent: BSTNode<K, V>? = this.findParent(key)
-		val child: BSTree<K, V> = BSTree()
+		val childTree: BSTree<K, V> = BSTree()
 		if(parent == null) return null
 		//На будущее, нужно добавить детей к child.add()
-		if(parent.right != null && parent.right?.key == key) child.add(key, parent.right!!.value)
-
-		else child.add(key, parent.left!!.value)
-		return child
+		var child: BSTNode<K, V>? = null
+		if(parent.right != null && parent.right?.key == key){
+			child = childTree.add(key, parent.right!!.value)
+			child?.right = parent.right!!.right
+			child?.left = parent.right!!.left
+		} else {
+			child = childTree.add(key, parent.left!!.value)
+			child?.right = parent.left!!.right
+			child?.left = parent.left!!.left
+		}
+		var nodes = 0
+		for(i in childTree) nodes++
+		childTree.amountOfNodes = nodes
+		return childTree
 	}
 }
