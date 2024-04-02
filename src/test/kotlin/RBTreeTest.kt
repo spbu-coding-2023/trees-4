@@ -254,6 +254,7 @@ class RBTreeTest {
             assertTrue { root!!.left!!.left!!.left!!.isRed }
         }
 
+        //in next remove tests brother means brother of the removed node's son
         @Test
         @DisplayName("Black brother don't have children, right ver")
         fun remove2R() {
@@ -280,30 +281,108 @@ class RBTreeTest {
             assertTrue { root.left!!.left!!.right!!.isRed }
         }
 
-
-
         @Test
-        @DisplayName("")
-        fun remove4r() {
+        @DisplayName("Black brother have 2 black children, right ver")
+        fun remove3R() {
 
         }
 
         @Test
-        @DisplayName("")
-        fun remove4l() {
+        @DisplayName("Black brother have 2 black children, left ver")
+        fun remove3L() {
 
         }
 
         @Test
-        @DisplayName("")
-        fun remove5r() {
-
+        @DisplayName("Black brother have only right red child, right ver")
+        fun remove4R() {
+            bft15.remove(7)
+            bft15.remove(5)
+            bft15.remove(1)
+            val removeResult = bft15.remove(6)
+            assertEquals(6, removeResult)
+            val colorResultComparison = arrayListOf(false, true, false, false, true, false,
+                true, true, true, false, true)
+            for (node in bft15)
+                assertEquals(colorResultComparison.removeFirst(), node.isRed)
         }
 
         @Test
-        @DisplayName("")
-        fun remove5l() {
+        @DisplayName("Black brother have only right red child, left ver")
+        fun remove4L() {
+            bft15.remove(9)
+            bft15.remove(11)
+            bft15.remove(15)
+            val removeResult = bft15.remove(10)
+            assertEquals(10, removeResult)
+            val colorResultComparison = arrayListOf(true, false, true, true, true, false,
+                true, false, false, true, false)
+            for (node in bft15)
+                assertEquals(colorResultComparison.removeFirst(), node.isRed)
+        }
 
+        @Test
+        @DisplayName("Black brother have only left red child, right ver")
+        fun remove5R() {
+            bft15.remove(7)
+            bft15.remove(5)
+            bft15.remove(3)
+            val removeResult = bft15.remove(6)
+            assertEquals(6, removeResult)
+            val colorResultComparison = arrayListOf(false, true, false, false, true, false,
+                true, true, true, false, true)
+            for (node in bft15)
+                assertEquals(colorResultComparison.removeFirst(), node.isRed)
+        }
+
+        @Test
+        @DisplayName("Black brother have only left red child, left ver")
+        fun remove5L() {
+            bft15.remove(9)
+            bft15.remove(11)
+            bft15.remove(13)
+            val removeResult = bft15.remove(10)
+            assertEquals(10, removeResult)
+            val colorResultComparison = arrayListOf(true, false, true, true, true, false,
+                true, false, false, true, false)
+            for (node in bft15)
+                assertEquals(colorResultComparison.removeFirst(), node.isRed)
+        }
+
+        @Test
+        @DisplayName("Black brother have 2 red children, right ver")
+        fun remove6R() {
+            bft15.add(16, 16)
+            bft15.add(17, 17)
+            val removeResult = bft15.remove(13)
+            assertEquals(13, removeResult)
+            val root = bft15.root
+            assertTrue { root!!.right!!.right!!.isRed }
+            assertTrue { !root!!.right!!.right!!.right!!.isRed }
+            assertTrue { !root!!.right!!.right!!.left!!.isRed }
+            assertTrue { root!!.right!!.right!!.left!!.right!!.isRed }
+            assertEquals(RBNode(16, 16), root!!.right!!.right)
+            assertEquals(RBNode(17, 17), root!!.right!!.right!!.right)
+            assertEquals(RBNode(14, 14), root!!.right!!.right!!.left)
+            assertEquals(RBNode(15, 15), root!!.right!!.right!!.left!!.right)
+        }
+
+        @Test
+        @DisplayName("Black brother have 2 red children, left ver")
+        fun remove6L() {
+            bft15.add(0, 0)
+            bft15.add(-1, -1)
+            val removeResult = bft15.remove(3)
+            assertEquals(3, removeResult)
+            val root = bft15.root
+            assertTrue { root!!.left!!.left!!.isRed }
+            assertTrue { !root!!.left!!.left!!.left!!.isRed }
+            assertTrue { !root!!.left!!.left!!.right!!.isRed }
+            assertTrue { root!!.left!!.left!!.right!!.left!!.isRed }
+            assertEquals(RBNode(0, 0), root!!.left!!.left)
+            assertEquals(RBNode(-1, -1), root.left!!.left!!.left)
+            assertEquals(RBNode(2, 2), root.left!!.left!!.right)
+            assertEquals(RBNode(1, 1), root.left!!.left!!.right!!.left)
         }
     }
 }
