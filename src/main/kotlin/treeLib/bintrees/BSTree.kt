@@ -88,19 +88,17 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	}
 
 
-
-	fun findParent(key: K): BSTNode<K, V>?{
+	fun findParent(key: K): BSTNode<K, V>? {
 		var parent = this.root
-		if(parent == null || root!!.key == key) return null
-		while(parent?.isThereChild() == true){
-			if( (parent.right != null && parent.right?.key == key) || (parent.left != null && parent.left?.key == key)) return parent
-			else{
-				if(key > parent.key){
-					if(parent.right == null) return null
+		if (parent == null || root!!.key == key) return null
+		while (parent?.isThereChild() == true) {
+			if ((parent.right != null && parent.right?.key == key) || (parent.left != null && parent.left?.key == key)) return parent
+			else {
+				if (key > parent.key) {
+					if (parent.right == null) return null
 					parent = parent.right
-				}
-				else{
-					if(parent.left == null) return null
+				} else {
+					if (parent.left == null) return null
 					parent = parent.left
 				}
 			}
@@ -108,13 +106,16 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		return null
 	}
 
+
 	fun deleteSubTree(key: K): Boolean{
 		val parent: BSTNode<K, V>? = this.findParent(key)
 		if(parent == null) return false
 		if(parent.right != null && parent.right?.key == key) parent.right = null
+
 		else parent.left = null
 		return true
 	}
+
 
 	fun getSubTree(key: K): BSTree<K, V>?{
 		val parent: BSTNode<K, V>? = this.findParent(key)
@@ -122,6 +123,7 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		if(parent == null) return null
 		//На будущее, нужно добавить детей к child.add()
 		if(parent.right != null && parent.right?.key == key) child.add(key, parent.right!!.value)
+
 		else child.add(key, parent.left!!.value)
 		return child
 	}
