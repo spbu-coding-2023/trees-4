@@ -51,8 +51,9 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 		var grandparent = treeBranch.removeFirstOrNull()
 
 		while (parent != null && parent.isRed && grandparent != null) {
-			val uncle = if (parent != grandparent.right) grandparent.right else grandparent.left
+			val uncle = if (parent == grandparent.right) grandparent.left else grandparent.right
 
+			//uncle is red -> recolor nodes and go higher up the treeBranch
 			if (uncle?.isRed == true) {
 				parent.isRed = false
 				uncle.isRed = false
@@ -60,19 +61,22 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 				son = grandparent
 				parent = treeBranch.removeFirstOrNull()
 				grandparent = treeBranch.removeFirstOrNull()
-			} else /*uncle is black or null */ {
-				if (parent == grandparent.right && son == parent.left) {
-					rotateRight(parent, grandparent)
-					parent = son
-				} else if (parent == grandparent.left && son == parent.right) {
-					rotateLeft(parent, grandparent)
-					parent = son
-				}
-				parent.isRed = false
-				grandparent.isRed = true
+			} else /*uncle is black or null -> do few rotations, recoloring and magic will happen*/ {
 				if (parent == grandparent.right) {
+					if (son == parent.left) {   //we want co-directional parent and son
+						rotateRight(parent, grandparent)
+						parent = son
+					}
+					parent.isRed = false
+					grandparent.isRed = true
 					rotateLeft(grandparent, treeBranch.firstOrNull())
-				} else {
+				} else /*parent == grandparent.left*/ {
+					if (son == parent.right) {  //we want co-directional parent and son too
+						rotateLeft(parent, grandparent)
+						parent = son
+					}
+					parent.isRed = false
+					grandparent.isRed = true
 					rotateRight(grandparent, treeBranch.firstOrNull())
 				}
 			}
@@ -90,7 +94,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 		var curNode = root ?: return null
 		while (curNode.key != key) {
 			treeBranch.addFirst(curNode)
-			val nextNode = curNode.moveOn(key) ?: return null //node with given key doesn't exist
+			val nextNode = curNode.moveOn(key) ?: return null //nextNode == null => removing node doesn't exist
 			curNode = nextNode
 		}
 
@@ -119,12 +123,13 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 		}
 
 		amountOfNodes--
-		when (curNode) {
+		when (curNode) {   //here we are "deleting" the node and replace it with his son
 			parent?.right -> parent.right = sonOfRemovedNode
 			parent?.left -> parent.left = sonOfRemovedNode
 			else -> root = sonOfRemovedNode   //only root doesn't have parent
 		}
 		treeBranch.addFirst(sonOfRemovedNode)
+		//curNode.isRed -> no balancing needed
 		if (!curNode.isRed) balancerRemove(treeBranch)
 
 		return curNode.value
@@ -138,12 +143,14 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 		var parent = treeBranch.removeFirstOrNull()
 		var grandparent = treeBranch.removeFirstOrNull()
 
+		//son == son of removed node
 		if (son?.isRed == true) {
 			son.isRed = false
 			return
 		}
 		while (parent != null) {
 			var brother = if (son == parent.right) parent.left else parent.right
+			//we want for brother to be black (´。＿。｀)
 			if (brother?.isRed == true) {
 				brother.isRed = false
 				parent.isRed = true
@@ -151,21 +158,20 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 					rotateRight(parent, grandparent)
 					grandparent = brother
 					brother = parent.left
-				}
-				if (son == parent.left) {
+				} else /*son == parent.left*/ {
 					rotateLeft(parent, grandparent)
 					grandparent = brother
 					brother = parent.right
 				}
 			}
 
+			//depending on nephew's colors, doing magic for balancing purposes
 			var nephewRight = brother?.right
 			var nephewLeft = brother?.left
 			if ((nephewRight == null || !nephewRight.isRed) && (nephewLeft == null || !nephewLeft.isRed)) {
 				brother?.isRed = true
-				if (!parent.isRed) {
-					parent.isRed = false
-					son = parent
+				if (!parent.isRed) {   //parent is black --> go higher up
+					son = parent       //the treeBranch and balance again
 					parent = grandparent
 					grandparent = treeBranch.removeFirstOrNull()
 				} else {
@@ -186,8 +192,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 					brother?.isRed = parent.isRed
 					parent.isRed = false
 					nephewLeft?.isRed = false
-				}
-				if (son == parent.left) {
+				} else /*son == parent.left*/ {
 					if (nephewLeft?.isRed == true && (nephewRight == null || !nephewRight.isRed)) {
 						rotateRight(brother, parent)
 						brother = parent.right
