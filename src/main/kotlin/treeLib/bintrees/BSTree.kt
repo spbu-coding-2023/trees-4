@@ -2,7 +2,6 @@ package treeLib.bintrees
 
 import treeLib.bintrees.interfaces.BinTree
 import treeLib.nodes.BSTNode
-import treeLib.nodes.TreeNode
 
 class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	override var root: BSTNode<K, V>? = null
@@ -131,7 +130,6 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		val parent: BSTNode<K, V>? = this.findParent(key)
 		val childTree: BSTree<K, V> = BSTree()
 		if(parent == null) return null
-		//На будущее, нужно добавить детей к child.add()
 		var child: BSTNode<K, V>? = null
 		if(parent.right != null && parent.right?.key == key){
 			child = childTree.add(key, parent.right!!.value)
