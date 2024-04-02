@@ -43,7 +43,7 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 					return curNode.left
 				}
 				curNode = curNode.left
-			} else return null
+			} else break
 		}
 		return null
 	}
@@ -66,13 +66,13 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 			else parent.left = null
 		} else if (count == 1) {
 			if (curNode?.left == null) {
-				if (parent.right === curNode){
+				if (parent.right == curNode){
 					if(curNode == root) this.root = root?.right
 					else parent.right = curNode?.right
 				}
 				else parent.left = curNode?.right
 			} else {
-				if (parent.right === curNode){
+				if (parent.right == curNode){
 					if(curNode == root) this.root = this.root?.left
 					else parent.right = curNode.left
 				}

@@ -151,6 +151,14 @@ class BSTreeTest {
 
             assertEquals(11, rt?.right?.left?.key)
             assertNull(rt?.right?.left?.left)
+
+            baum.add(12, "test")
+            baum.remove(11)
+            assertEquals(BSTNode(12, "test"), rt?.right?.left)
+
+            baum.remove(25)
+            baum.remove(20)
+            assertEquals(BSTNode(15, "test"), rt?.right?.right)
         }
 
         @Test
@@ -332,7 +340,9 @@ class BSTreeTest {
             assertNull(baum.root())
             assertEquals(0, baum.countNodes())
         }
+
     }
+
 
     @Nested
     inner class SubTree() {
