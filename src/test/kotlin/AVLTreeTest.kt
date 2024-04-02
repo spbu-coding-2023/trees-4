@@ -12,19 +12,20 @@ class AVLTreeTest {
 
 	@Nested
 	inner class InsertionTests {
-		@Test
-		fun useAddOnEmptyTree() {
-			tree.clear()
-			tree.add(0, "a")
-			assertEquals(0, tree.root()?.key)
-			assertEquals("a", tree.root()?.value)
-		}
 
 		@BeforeEach
 		fun setUp() {
 			tree.add(0, "a")
 			tree.add(1, "b")
 			tree.add(-1, "b")
+		}
+
+		@Test
+		fun useAddOnEmptyTree() {
+			tree.clear()
+			tree.add(0, "a")
+			assertEquals(0, tree.root()?.key)
+			assertEquals("a", tree.root()?.value)
 		}
 
 		@Test
@@ -36,10 +37,7 @@ class AVLTreeTest {
 		}
 
 		@Test
-		fun addDoesNothingWhenKeyExists() {
-			tree.add(0, "a")
-			tree.add(1, "b")
-			tree.add(-1, "b")
+		fun addDoesNothingIfKeyExists() {
 			assertEquals(null, tree.root()?.right?.right)
 			assertEquals(null, tree.root()?.right?.left)
 		}
@@ -56,7 +54,7 @@ class AVLTreeTest {
 		}
 
 		@Test
-		fun removeOnRoot() {
+		fun removeRoot() {
 			val key : Int? = tree.root()?.key
 			if (key != null) {
 				tree.remove(key)
