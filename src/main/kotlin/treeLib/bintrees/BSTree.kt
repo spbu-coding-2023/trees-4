@@ -8,7 +8,6 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	override var root: BSTNode<K, V>? = null
 	override var amountOfNodes = 0
 
-
 	fun addPairs(vararg pairs: Pair<K, V>): Boolean {
 		for(pair in pairs){
 			if( this.add(pair.first, pair.second) == null ) return false
@@ -56,19 +55,28 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 		var parent = this.findParent(key)
 		if(this.root?.key == key) parent = BSTNode(root!!.key, root!!.value, root)
 		if(parent == null) return null
-		if(parent.right != null && parent.right?.key == key) curNode = parent.right
-		else curNode = parent.left
+		curNode = if(parent.right != null && parent.right?.key == key) parent.right
+		else parent.left
 		if (curNode?.right != null) count++
 		if (curNode?.left != null) count++
 		if (count == 0) {
-			if (parent.right === curNode) parent.right = null
+			if (parent.right === curNode){
+				if(curNode == root) this.root = null
+				else parent.right = null
+			}
 			else parent.left = null
 		} else if (count == 1) {
 			if (curNode?.left == null) {
-				if (parent.right === curNode) parent.right = curNode?.right
+				if (parent.right === curNode){
+					if(curNode == root) this.root = root?.right
+					else parent.right = curNode?.right
+				}
 				else parent.left = curNode?.right
 			} else {
-				if (parent.right === curNode) parent.right = curNode.left
+				if (parent.right === curNode){
+					if(curNode == root) this.root = this.root?.left
+					else parent.right = curNode.left
+				}
 				else parent.left = curNode.left
 			}
 		} else {

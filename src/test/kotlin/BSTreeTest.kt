@@ -74,6 +74,16 @@ class BSTreeTest {
         }
 
         @Test
+        fun addingExistingNodeButWithDifferentValues() {
+            assertNull(baum.add(5, "Deutschland"))
+            assertNotEquals("Deutschland", baum.root()?.right?.value)
+            assertNull(baum.add(-1, "Deutschland"))
+            assertNotEquals("Deutschland", baum.root()?.left?.left?.value)
+            assertNull(baum.add(4, "Deutschland"))
+            assertNotEquals("Deutschland", baum.root()?.value)
+        }
+
+        @Test
         fun orderMatters() {
             baum.clear()
             assertTrue(baum.addPairs(Pair(4, "Vier"), Pair(5, "Funf"), Pair(40, "Vierzig"), Pair(44,"Vierundvierzig")))
@@ -183,9 +193,11 @@ class BSTreeTest {
         fun removeNotExistingOderAlreadyRemovedNode() {
             assertNull(baum.remove(62))
             assertNull(baum.remove(-24))
-            assertFalse(baum.removePairs(5,6,8,3))
+            assertFalse(baum.removePairs(-5,6,8,3))
+            assertEquals(11, baum.countNodes())
             assertEquals("test", baum.remove(13))
             assertNull(baum.remove(13))
+            assertEquals(10, baum.countNodes())
         }
 
         @Test
@@ -203,7 +215,42 @@ class BSTreeTest {
         }
 
         @Test
-        fun removeRoot() {
+        fun removeRootWithoutKinder() {
+            baum.clear()
+            baum.add(4, "Heil")
+            baum.remove(4)
+            assertNull(baum.root())
+        }
+
+        @Test
+        fun removeRootWithOnlyRightKinder() {
+            baum.clear()
+            for(key in 0..10) baum.add(key, "test")
+            for(i in 0..9){
+                baum.remove(i)
+                assertEquals(BSTNode(i + 1, "test"), baum.root())
+            }
+            baum.remove(10)
+            assertNull(baum.root())
+            assertEquals(0, baum.countNodes())
+        }
+
+        @Test
+        fun removeRootWithOnlyLeftKinder() {
+            baum.clear()
+            for(key in 0 downTo -10) baum.add(key, "test")
+            for(i in 0 downTo -9){
+                baum.remove(i)
+                assertEquals(BSTNode(i-1, "test"), baum.root())
+                assertEquals(10 + i, baum.countNodes())
+            }
+            baum.remove(-10)
+            assertNull(baum.root())
+            assertEquals(0, baum.countNodes())
+        }
+
+        @Test
+        fun removeRootWithTwoKinder() {
             baum.remove(10)
             assertEquals(BSTNode(11, "test"), baum.root())
             baum.remove(11)
@@ -217,13 +264,12 @@ class BSTreeTest {
         @Test
         fun howMuchDoWeNeedToDeleteTheWholeTreeByRemovingEachSingleNode() {
             val len = 11
-            for(i in 0..5){
+            for(i in 0..10){
                 assertNotNull(baum.root())
                 baum.remove(baum.root()?.key!!.toInt())
             }
-            baum.remove(25)
-            assertEquals(BSTNode(-7, "test"), baum.root()?.left)
             assertNull(baum.root())
+            assertEquals(0, baum.countNodes())
         }
     }
 }
