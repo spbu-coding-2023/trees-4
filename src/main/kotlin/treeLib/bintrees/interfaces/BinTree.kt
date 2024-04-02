@@ -13,11 +13,11 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 	fun findByKey(key: K): Node_T? {
 		var curNode = root
 		while (curNode != null)
-		    curNode = when {
+			curNode = when {
 				key > curNode.key -> curNode.right
 				key < curNode.key -> curNode.left
 				else -> return curNode
-		    }
+			}
 		return null
 	}
 
@@ -71,12 +71,14 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 
 	fun postOrderIterator(): Iterator<Pair<K, V>> = TreeIterator(root, IterationOrder.POST_ORDER)
 
+
 	private fun countHeight(tNode: Node_T?): Int {
 		if (tNode == null) return 0
-		val lf = countHeight(tNode.left)
-		val rg = countHeight(tNode.right)
-		return kotlin.math.max(lf, rg) + 1
+		val leftChild = countHeight(tNode.left)
+		val rightChild = countHeight(tNode.right)
+		return kotlin.math.max(leftChild, rightChild) + 1
 	}
+
 
 	open fun height(): Int? {
 		return countHeight(root)

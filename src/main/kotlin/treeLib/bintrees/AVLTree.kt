@@ -26,6 +26,9 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 				val min = findMin(nodeB)
 				min?.right = removeMin(nodeB)
 				min?.left = nodeA
+				if (root?.key == key){
+					root = min
+				}
 				return balanceNode(min)
 			}
 			return balanceNode(node)
@@ -39,7 +42,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 		if (node?.left != null) {
 			return findMin(node.left)
 		}
-		return (node)
+		return node
 	}
 
 	private fun removeMin(node: AVLNode<K, V>?): AVLNode<K, V>? {
@@ -73,7 +76,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 
 	private fun rotateLeft(nodeA: AVLNode<K, V>?): AVLNode<K, V>? {
 		if (nodeA != null) {
-			if ((nodeA.right) != null) {
+			if (nodeA.right != null) {
 				val nodeB = nodeA.right
 				nodeA.right = nodeB?.left
 				nodeB?.left = nodeA
@@ -90,7 +93,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 
 	private fun rotateRight(nodeA: AVLNode<K, V>?): AVLNode<K, V>? {
 		if (nodeA != null) {
-			if ((nodeA.left) != null) {
+			if (nodeA.left != null) {
 				val nodeB = nodeA.left
 				nodeA.left = nodeB?.right
 				nodeB?.right = nodeA
@@ -161,10 +164,10 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 	}
 
 	override fun height(): Int? {
-		if (root == null) {
-			return 0
+		return if (root == null) {
+			0
 		} else {
-			return root?.height
+			root?.height
 		}
 	}
 }
