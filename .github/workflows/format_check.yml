@@ -1,7 +1,6 @@
 name: Run detekt - static code analyzer
 on:
  push:
- pull_request:
 jobs:
  detekt:
    runs-on: ubuntu-latest
