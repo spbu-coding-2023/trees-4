@@ -29,5 +29,6 @@ jobs:
           paths: |
             ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
+          skip-if-no-changes: true
 
           
