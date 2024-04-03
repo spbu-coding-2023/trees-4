@@ -5,6 +5,7 @@ import treeLib.nodes.TreeNode
 internal interface TreeBalancer<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> {
 	var root: Node_T?
 
+	//We must provide parent, because don't have link to him in node
 	fun rotateRight(node: Node_T?, parent: Node_T?) {
 		if (node == null) return
 		val nodeLeft = node.left

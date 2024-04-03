@@ -164,12 +164,14 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 					brother = parent.right
 				}
 			}
+			brother ?: throw IllegalStateException("Balance of red-black tree violated:" +
+				" parent node have subtrees with black height 2 and black height 1")
 
 			//depending on nephew's colors, doing magic for balancing purposes
-			var nephewRight = brother?.right
-			var nephewLeft = brother?.left
+			var nephewRight = brother.right
+			var nephewLeft = brother.left
 			if ((nephewRight == null || !nephewRight.isRed) && (nephewLeft == null || !nephewLeft.isRed)) {
-				brother?.isRed = true
+				brother.isRed = true
 				if (!parent.isRed) {   //parent is black --> go higher up
 					son = parent       //the treeBranch and balance again
 					parent = grandparent
@@ -181,28 +183,28 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 			} else {
 				if (son == parent.right) {
 					if (nephewRight?.isRed == true && (nephewLeft == null || !nephewLeft.isRed)) {
-						rotateLeft(brother, parent)
-						brother = parent.left
-						nephewLeft = brother?.left
-						brother?.isRed = false
-						nephewLeft?.isRed = true
+						rotateLeft(brother, parent)   //      B           /nL == new brother
+						nephewLeft = brother	      //     / \  ->     /B   == new left nephew
+						brother = nephewRight         //    nL  nR      /nR
+						brother.isRed = false
+						nephewLeft.isRed = true
 					}
 
 					rotateRight(parent, grandparent)
-					brother?.isRed = parent.isRed
+					brother.isRed = parent.isRed
 					parent.isRed = false
 					nephewLeft?.isRed = false
 				} else /*son == parent.left*/ {
 					if (nephewLeft?.isRed == true && (nephewRight == null || !nephewRight.isRed)) {
-						rotateRight(brother, parent)
-						brother = parent.right
-						nephewRight = brother?.right
-						brother?.isRed = false
-						nephewRight?.isRed = true
+						rotateRight(brother, parent)  //      B       \nR == new brother
+						nephewRight = brother         //     / \  ->   \B == new right nephew
+						brother = nephewLeft          //    nL  nR      \nL
+						brother.isRed = false
+						nephewRight.isRed = true
 					}
 
 					rotateLeft(parent, grandparent)
-					brother?.isRed = parent.isRed
+					brother.isRed = parent.isRed
 					parent.isRed = false
 					nephewRight?.isRed = false
 					}
