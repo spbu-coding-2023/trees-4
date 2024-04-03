@@ -1,17 +1,9 @@
-## 1
-name: Run detekt
-## 2
+name: Run detekt - static code analyzer
 on:
  push:
-   branches:
-   - main
  pull_request:
-   branches:
-   - main
-## 3
 jobs:
  detekt:
-   ## 4
    runs-on: ubuntu-latest
    steps:
       - name: "checkout"
