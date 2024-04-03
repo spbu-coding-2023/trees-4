@@ -9,22 +9,6 @@ class BSTreeTest {
     var baum = BSTree<Int, String>()
 
     @Test
-    fun isThereChild() {
-        baum.add(4, "qwerty")
-        baum.add(2, "Ge")
-        baum.add(5, "rma")
-        baum.add(3, "ny")
-        baum.add(-1, "ny")
-
-        val rt = baum.root()
-
-        assertFalse(rt?.right!!.isThereChild())
-        assertFalse(rt.left?.right!!.isThereChild())
-        assertTrue(rt.isThereChild())
-        assertTrue(rt.left!!.isThereChild())
-    }
-
-    @Test
     fun findParent() {
         baum.add(4, "qwerty")
         baum.add(2, "Ge")

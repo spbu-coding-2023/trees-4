@@ -98,7 +98,7 @@ class BSTree<K : Comparable<K>, V> : BinTree<K, V, BSTNode<K, V>>() {
 	fun findParent(key: K): BSTNode<K, V>? {
 		var parent = this.root
 		if (parent == null || root!!.key == key) return null
-		while (parent?.isThereChild() == true) {
+		while (parent?.right != null || parent?.left != null) {
 			if ((parent.right != null && parent.right?.key == key) || (parent.left != null && parent.left?.key == key)) return parent
 			else {
 				if (key > parent.key) {
