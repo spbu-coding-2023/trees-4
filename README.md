@@ -2,10 +2,10 @@
 
 ## About Tree Lib
 
-Tree Lib is the kotlin library for working with 3 different binary tree implementations: Binary Search Tree(BST), AVL-Tree(AVL) and Red-Black Tree(RB).
+Tree Lib is the kotlin library for working with 3 different binary tree implementations: Binary Search Tree (BST), AVL-Tree (AVL) and Red-Black Tree (RB).
 
 ## How to use
-To init an object, you must provide key and value type
+To init an object, you must provide key and value type.
 ```
 val treeExample: BSTree<<Key>, <Value>>
 ```
@@ -17,23 +17,23 @@ val treeExample = BSTree<String, Double>()
 All trees supports basic methods:
 - Add values and keys as nodes to the tree:
   
-  `treeExample.add("abc", 1.0)`
+  `treeExample.add(key: "abc", value: 1.0)`
   
 - Change node's value:
   
-  `treeExample.changeVal("abc", 37.7)`
+  `treeExample.changeVal(key: "abc", value: 37.7)`
   
 - Remove node from the tree:
   
-  `treeExample.remove("key of node")`
+  `treeExample.remove(key: "Choose wisely.")`
   
 - Find node by key:
   
-  `treeExample.find("meaning of life")`
+  `treeExample.findByKey(key: "Anything you can compare!")`
   
 - Iterate in tree:
   
-  `for(node in treeExample) { ...`
+  `for (node in treeExample) { ...`
   
 - ...and much more!
 
@@ -48,15 +48,15 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 This library was created by:
-* Magomedov Islam(tg  @JapEmpLove) - BST
-* Damir Yunusov(tg  @TopographicOcean) - RB
-* Sofya Grishkova(tg  @tea_jack) - AVL
+* Magomedov Islam (tg  @JapEmpLove) - BST
+* Damir Yunusov (tg  @TopographicOcean) - RB
+* Sofya Grishkova (tg  @tea_jack) - AVL
 
 ## Acknowledgments
 
 [README Template](https://github.com/othneildrew/Best-README-Template)
 
-Links to english Wikipages about binary trees:
+Links to Wikipages about binary trees:
 * [Binary Tree](https://en.wikipedia.org/wiki/Binary_tree)
 * [Binary Search Tree](https://en.wikipedia.org/wiki/Binary_search_tree)
 * [Red-Black Tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)
