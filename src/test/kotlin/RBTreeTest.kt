@@ -9,8 +9,8 @@ class RBTreeTest {
     var emptyTree = RBTree<Int, Int>()
 
     @BeforeEach
-    fun init() {
-        emptyTree = RBTree()
+    fun emptyTree() {
+        emptyTree.clear()
     }
 
     @Nested
@@ -138,7 +138,11 @@ class RBTreeTest {
         @Test
         @DisplayName("Add multiple nodes")
         fun addMany() {
-            val nodesResult = MutableList(20) { emptyTree.add(it, it) }
+            val nodesResult = MutableList(10) { emptyTree.add(it, it) }
+            assertEquals(5, emptyTree.height())
+            for (keyValue in 10..19)
+                nodesResult.addLast(emptyTree.add(keyValue, keyValue))
+            assertEquals(6, emptyTree.height())
             val colorResult = arrayListOf(
                 false, false, false, true, false,
                 false, false, false, false, false,
