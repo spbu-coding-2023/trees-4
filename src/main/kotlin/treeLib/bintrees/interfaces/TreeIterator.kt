@@ -5,7 +5,7 @@ import treeLib.nodes.TreeNode
 class TreeIterator<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
 	private val root: Node_T?,
 	private val order: IterationOrder,
-	): Iterator<Node_T> {
+) : Iterator<Node_T> {
 	private val stack: ArrayDeque<Node_T> = ArrayDeque()
 
 	init {

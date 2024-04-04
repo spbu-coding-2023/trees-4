@@ -1,10 +1,10 @@
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import treeLib.bintrees.AVLTree
 import treeLib.nodes.AVLNode
 import kotlin.math.abs
-import org.junit.jupiter.api.Test
 
 
 class AVLTreeTest {
@@ -29,7 +29,7 @@ class AVLTreeTest {
 		}
 
 		@Test
-		fun addByKey () {
+		fun addByKey() {
 			assertEquals(-1, tree.root()?.left?.key)
 			assertEquals("b", tree.root()?.left?.value)
 			assertEquals(1, tree.root()?.right?.key)
@@ -55,7 +55,7 @@ class AVLTreeTest {
 
 		@Test
 		fun removeRoot() {
-			val key : Int? = tree.root()?.key
+			val key: Int? = tree.root()?.key
 			if (key != null) {
 				tree.remove(key)
 				assertNotNull(tree.root())
@@ -72,7 +72,7 @@ class AVLTreeTest {
 		}
 
 		@Test
-		fun removeNodeWithNoChildren(){
+		fun removeNodeWithNoChildren() {
 			tree.remove(10)
 			assertNull(tree.findByKey(10))
 			for (i in 0..9) {
@@ -81,7 +81,7 @@ class AVLTreeTest {
 		}
 
 		@Test
-		fun removeNodeWithTwoChildren(){
+		fun removeNodeWithTwoChildren() {
 			tree.remove(7)
 			assertNull(tree.findByKey(7))
 			for (i in 0..10) {
@@ -127,7 +127,7 @@ class AVLTreeTest {
 		}
 
 		@BeforeEach
-		fun setUpRandomTree(){
+		fun setUpRandomTree() {
 			val ranLen = (2..100).random()
 			for (i in 1..ranLen) {
 				val ranItem = (1..10000).random()
@@ -147,8 +147,8 @@ class AVLTreeTest {
 		}
 
 		@Test
-		fun afterRootRemoveAVLIsBalanced(){
-			val key : Int? = tree.root()?.key
+		fun afterRootRemoveAVLIsBalanced() {
+			val key: Int? = tree.root()?.key
 			if (key != null) {
 				tree.remove(key)
 				assertTrue(isBalanced(tree.root()))
@@ -188,14 +188,14 @@ class AVLTreeTest {
 		}
 
 		@Test
-		fun findMax(){
+		fun findMax() {
 			assertEquals(tree.findByKey(10), tree.max())
 			tree.clear()
 			assertNull(tree.max())
 		}
 
 		@Test
-		fun findMin(){
+		fun findMin() {
 			assertEquals(tree.findByKey(0), tree.min())
 			tree.clear()
 			assertNull(tree.min())

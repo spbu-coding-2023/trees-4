@@ -2,11 +2,10 @@ package treeLib.bintrees.interfaces
 
 import treeLib.nodes.TreeNode
 
-internal interface TreeBalancer<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> {
-	var root: Node_T?
+abstract class BalancedTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : BinTree<K, V, Node_T>() {
 
-	//We must provide parent, because don't have link to him in node
-	fun rotateRight(node: Node_T?, parent: Node_T?) {
+	//We must provide parent, because don't have link to it in node
+	protected fun rotateRight(node: Node_T?, parent: Node_T?) {
 		if (node == null) return
 		val nodeLeft = node.left
 		node.left = nodeLeft?.right
@@ -15,7 +14,7 @@ internal interface TreeBalancer<K : Comparable<K>, V, Node_T : TreeNode<K, V, No
 		if (parent != null) parent.attach(nodeLeft) else root = nodeLeft   //root doesn't have parent
 	}
 
-	fun rotateLeft(node: Node_T?, parent: Node_T?) {
+	protected fun rotateLeft(node: Node_T?, parent: Node_T?) {
 		if (node == null) return
 		val nodeRight = node.right
 		node.right = nodeRight?.left

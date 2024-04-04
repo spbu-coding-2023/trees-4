@@ -1,14 +1,13 @@
 package treeLib.bintrees
 
-import treeLib.bintrees.interfaces.BinTree
-import treeLib.bintrees.interfaces.TreeBalancer
+import treeLib.bintrees.interfaces.BalancedTree
 import treeLib.nodes.RBNode
 
 /**
  * Class which implements... Red-Black Tree :O
  * Takes two types: for key(K) and for value(V)
  */
-class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer<K, V, RBNode<K, V>> {
+class RBTree<K : Comparable<K>, V> : BalancedTree<K, V, RBNode<K, V>>() {
 	override var root: RBNode<K, V>? = null
 	override var amountOfNodes: Int = 0
 
@@ -37,7 +36,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 
 		amountOfNodes++
 		treeBranch.addFirst(newNode)
-		balancerAdd(treeBranch)
+		balancedAdd(treeBranch)
 
 		return newNode
 	}
@@ -45,7 +44,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 	/**
 	 * Used in add() method to balance tree :)
 	 */
-	private fun balancerAdd(treeBranch: ArrayDeque<RBNode<K, V>>) {
+	private fun balancedAdd(treeBranch: ArrayDeque<RBNode<K, V>>) {
 		var son = treeBranch.removeFirst()
 		var parent = treeBranch.removeFirstOrNull()
 		var grandparent = treeBranch.removeFirstOrNull()
@@ -118,6 +117,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 				curNode.value = temp  //to save deleted node's value
 				curNode.left
 			}
+
 			sonRight != null -> sonRight
 			else /*sonLeft != null*/ -> sonLeft
 		}
@@ -130,7 +130,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 		}
 		treeBranch.addFirst(sonOfRemovedNode)
 		//curNode.isRed -> no balancing needed
-		if (!curNode.isRed) balancerRemove(treeBranch)
+		if (!curNode.isRed) balancedRemove(treeBranch)
 
 		return curNode.value
 	}
@@ -138,7 +138,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 	/**
 	 * Used in remove() method to balance tree :(
 	 */
-	private fun balancerRemove(treeBranch: ArrayDeque<RBNode<K, V>?>) {
+	private fun balancedRemove(treeBranch: ArrayDeque<RBNode<K, V>?>) {
 		var son = treeBranch.removeFirstOrNull()
 		var parent = treeBranch.removeFirstOrNull()
 		var grandparent = treeBranch.removeFirstOrNull()
@@ -164,8 +164,10 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 					brother = parent.right
 				}
 			}
-			brother ?: throw IllegalStateException("Balance of red-black tree violated:" +
-				" parent node have subtrees with black height 2 and black height 1")
+			brother ?: throw IllegalStateException(
+				"Balance of red-black tree violated:" +
+					" parent node have subtrees with black height 2 and black height 1"
+			)
 
 			//depending on nephew's colors, doing magic for balancing purposes
 			var nephewRight = brother.right
@@ -184,7 +186,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 				if (son == parent.right) {
 					if (nephewRight?.isRed == true && (nephewLeft == null || !nephewLeft.isRed)) {
 						rotateLeft(brother, parent)   //      B           /nL == new brother
-						nephewLeft = brother	      //     / \  ->     /B   == new left nephew
+						nephewLeft = brother          //     / \  ->     /B   == new left nephew
 						brother = nephewRight         //    nL  nR      /nR
 						brother.isRed = false
 						nephewLeft.isRed = true
@@ -207,7 +209,7 @@ class RBTree<K : Comparable<K>, V> : BinTree<K, V, RBNode<K, V>>(), TreeBalancer
 					brother.isRed = parent.isRed
 					parent.isRed = false
 					nephewRight?.isRed = false
-					}
+				}
 				break
 			}
 		}

@@ -1,10 +1,11 @@
 package treeLib.bintrees
 
+import treeLib.bintrees.interfaces.BalancedTree
 import treeLib.bintrees.interfaces.BinTree
 import treeLib.nodes.AVLNode
 
 
-class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
+class AVLTree<K : Comparable<K>, V> : BalancedTree<K, V, AVLNode<K, V>>(){
 	override var root: AVLNode<K, V>? = null
 	override var amountOfNodes = 0
 
@@ -26,7 +27,7 @@ class AVLTree<K : Comparable<K>, V> : BinTree<K, V, AVLNode<K, V>>() {
 				val min = findMin(nodeB)
 				min?.right = removeMin(nodeB)
 				min?.left = nodeA
-				if (root?.key == key){
+				if (root?.key == key) {
 					root = min
 				}
 				return balanceNode(min)
