@@ -1,10 +1,10 @@
 name: Run detekt - static code analyzer
 on:
- push:
+  push:
 jobs:
- detekt:
-   runs-on: ubuntu-latest
-   steps:
+  detekt:
+    runs-on: ubuntu-latest
+    steps:
       - name: "checkout"
         uses: actions/checkout@v2
       - name: "detekt"
