@@ -23,6 +23,7 @@ class TreeIterator<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
     private fun inOrder(curNode: Node_T) {
         val leftNode = curNode.left
         val rightNode = curNode.right
+
         leftNode?.let { inOrder(leftNode) }
         stack.add(curNode)
         rightNode?.let { inOrder(rightNode) }
@@ -31,7 +32,9 @@ class TreeIterator<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
     private fun preOrder(curNode: Node_T) {
         val leftNode = curNode.left
         val rightNode = curNode.right
+
         stack.add(curNode)
+
         leftNode?.let { preOrder(leftNode) }
         rightNode?.let { preOrder(rightNode) }
     }
@@ -39,8 +42,10 @@ class TreeIterator<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>>(
     private fun postOrder(curNode: Node_T) {
         val leftNode = curNode.left
         val rightNode = curNode.right
+
         leftNode?.let { postOrder(leftNode) }
         rightNode?.let { postOrder(rightNode) }
+
         stack.add(curNode)
     }
 

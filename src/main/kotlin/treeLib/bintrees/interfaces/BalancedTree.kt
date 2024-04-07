@@ -7,7 +7,9 @@ abstract class BalancedTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T
     //We must provide parent, because don't have link to it in node
     protected fun rotateRight(node: Node_T?, parent: Node_T?) {
         if (node == null) return
+
         val nodeLeft = node.left
+
         node.left = nodeLeft?.right
         nodeLeft?.right = node
 
@@ -16,6 +18,7 @@ abstract class BalancedTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T
 
     protected fun rotateLeft(node: Node_T?, parent: Node_T?) {
         if (node == null) return
+
         val nodeRight = node.right
         node.right = nodeRight?.left
         nodeRight?.left = node

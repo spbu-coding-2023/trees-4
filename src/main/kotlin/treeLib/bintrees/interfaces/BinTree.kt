@@ -12,17 +12,20 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 
     fun findByKey(key: K): Node_T? {
         var curNode = root
+
         while (curNode != null)
             curNode = when {
                 key > curNode.key -> curNode.right
                 key < curNode.key -> curNode.left
                 else -> return curNode
             }
+
         return null
     }
 
     open fun changeVal(key: K, newValue: V): V? {
         var curNode = root
+
         while (curNode != null)
             curNode = when {
                 key > curNode.key -> curNode.right
@@ -32,20 +35,25 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
                     return newValue
                 }
             }
+
         return null
     }
 
     fun max(): Node_T? {
         var curNode = root
+
         while (curNode?.right != null)
             curNode = curNode.right
+
         return curNode
     }
 
     fun min(): Node_T? {
         var curNode = root
+
         while (curNode?.left != null)
             curNode = curNode.left
+
         return curNode
     }
 
@@ -54,7 +62,7 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
     }
 
     fun clear() {
-        root?.let { root = null }
+        root = null
         amountOfNodes = 0
     }
 
@@ -74,8 +82,10 @@ abstract class BinTree<K : Comparable<K>, V, Node_T : TreeNode<K, V, Node_T>> : 
 
     private fun countHeight(tNode: Node_T?): Int {
         if (tNode == null) return 0
+
         val leftChild = countHeight(tNode.left)
         val rightChild = countHeight(tNode.right)
+
         return kotlin.math.max(leftChild, rightChild) + 1
     }
 
