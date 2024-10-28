@@ -5,4 +5,4 @@ class TreapNode<K : Comparable<K>, V: Comparable<V>>(
     value: V,
     right: TreapNode<K, V>? = null,
     left: TreapNode<K, V>? = null
-) : TreeNode<K, V, TreapNode<K, V>>(key, priority, right, left)
+) : TreeNode<K, V, TreapNode<K, V>>(key, value, right, left)

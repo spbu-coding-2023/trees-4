@@ -1,86 +1,138 @@
 package treeLib.bintrees.interfaces
 
+import treeLib.bintrees.BSTree
 import treeLib.bintrees.interfaces.BinTree
+import treeLib.nodes.BSTNode
 import treeLib.nodes.TreapNode
 import java.util.*
 
 class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V>>() {
     override var root: TreapNode<K, V>? = null
     override var amountOfNodes = 0
-    private val priorQ = PriorityQueue<TreapNode<K, V>>(compareByDescending { it.value })
+    private var subTree = PriorityQueue<TreapNode<K, V>>(compareByDescending { it.value })
 
 
-    //Получив родителя и найдя куда он идёт, мы связываем и передаём сюда
-    //Он должен здесь дойти до него по обычной итерации дерева
-    //и параллельно должно менять maxLim и minLim, по этому мы составим новый массив
-    //и начнём строить дерево с нуля где node это корень
-    fun rebuildTree(node: TreapNode<K, V>) {
-        var maxLim: TreapNode<K, V>? = root
-        var minLim: TreapNode<K, V>? = root
-        var curRoot = root
-        var reachedNode = false
-        for (curNode in priorQ){
-            if(reachedNode == false) {
-                if (curNode.value > curRoot?.value ?: curNode.value) { //N_U_L_L-S_A_F_E_T_Y
-                    minLim = curRoot
-                    curRoot = curNode?.right // Тут надо подумать
-                } else if (curNode.value < curRoot?.value ?: curNode.value) {//N_U_L_L-S_A_F_E_T_Y
-                    maxLim = curRoot
-                    curRoot = curNode?.left
-                } else reachedNode = true
-            }
-            else {
+    fun collectNodes(node: TreapNode<K, V>) {
+        subTree.add(node)
+        //Есть ощущения, что то, что снизу, не совсем корректно в плане NULL-SAFETY
+        if(node.right != null) node.right?.let{ collectNodes(it) }
+        if(node.left != null) node.left?.let{ collectNodes(it) }
+    }
 
-            }
+    fun buildSubTree(): TreapNode<K, V> {
+        var baum = Treap<K, V>()
+        for(node in subTree) baum.add(node.key, node.value)
+        baum.root?.let { baum.collectNodes(it) }
+        subTree = baum.subTree  //После такого оно сохранит свойство автоматической сортировки иль як?
+        return subTree.first()
+        /*
+        subTree.clean()
+        baum.root?.let { return it }
+         */
+        //Может быть можно не собирать массив, а просто взять корень и уже с ним работать?
+    }
+
+    internal fun findParent(key: K): TreapNode<K, V>? {
+        var parent = this.root
+        if (root?.key == key) return null
+
+        while (parent != null && (parent.right != null || parent.left != null)) {
+            if (parent.right != null && parent.right?.key == key || parent.left != null && parent.left?.key == key) return parent
+
+            parent = if (key > parent.key) parent.right
+            else parent.left
         }
+
+        return null
     }
 
     override fun remove(key: K): V? {
         if(root == null) return null
-        if(root?.key == key && amountOfNodes == 1) {
-            priorQ.remove(root)
+        /*if(root?.key == key && amountOfNodes == 1) {
             amountOfNodes -= 1
             root = null
+        }*/
+
+        val parent = this.findParent(key)
+        var count = 0
+        val curNode = if (parent?.right != null && parent.right?.key == key) parent.right
+        else parent?.left
+        if(curNode?.left != null) count++
+        if(curNode?.right != null) count++
+
+        if(count == 0) {
+            if(parent?.right == curNode) parent?.right = null
+            else parent?.left == null
+        }
+        if(count == 1) {
+            if(parent?.right == curNode) parent?.right = curNode?.right ?: curNode?.left
+            else parent?.left = curNode?.right ?: curNode?.left
+        }
+        if(count == 2) {
+            curNode?.right?.let { collectNodes(it) }
+            curNode?.left?.let { collectNodes(it) }
+            val result = buildSubTree()
+            if(parent == root) root = result
+            else if(parent?.right == curNode) parent?.right = result
+            else parent?.left == result
         }
         return null
     }
 
     override fun add(key: K, priority: V): TreapNode<K, V>? {
+        val newNode = TreapNode(key, priority)
         if(root == null) {
-            root = TreapNode(key, priority)
+            root = newNode
             amountOfNodes += 1
-            priorQ.add(root)
             return root
         }
+        var parent: TreapNode<K, V>? = null
+        root?.let { parent = x(it, it, newNode) }
 
-        //Должны вызвать функцию X, отработать случаи когда куда добавляется новый ключ
-        //у нас нету ничего
-        //и далее работать в rebuildTree со случаями, когда там что-то всё ж имеется
-        //потому что она так и задумана, что применяется, когда нужно перестроить поддерево
-        //А ежли его нету, то и перестраивать ничего не надо
+        parent?.let{
+            if(it.key < key) {
+                if(it.right == null) it.right = newNode
+                else {
+                    newNode.right = it.right
+                    collectNodes(newNode)
+                    it.right = buildSubTree()
+                }
+            }
+            else if(it.key < key)( //Не забудь подумать о случае, когда добавленный ключ вже существует
+                if(it.left == null) it.left = newNode
+                else{
+                    newNode.left = it.left
+                    collectNodes(newNode)
+                    it.left = buildSubTree()
+                }
+            )
+            else {
+                newNode.right = root
+                collectNodes(newNode)
+                root = buildSubTree()
+            }
+
+                amountOfNodes += 1
+                return newNode
+        }
 
         return root
     }
 
 
-    //Здесь мы находим родителя нашего нового ключа
-    //А далее по значению ключа(больше иль меньше родителя) выясняем куда оно идёт
-    //и работаем исходя из этого
     fun x(curNode: TreapNode<K, V>, parent: TreapNode<K, V>, node: TreapNode<K, V>): TreapNode<K, V>{
         if(curNode.value < node.value) {
-            if(curNode.key < node.key) {
-                //We need to rebuild and build new tree with node.key as a root
-                //Иль попытайся придумать что-то со списками
-            }
+            if(curNode == parent) return node
+            return parent
         }
         if(curNode.key > node.key) {
-            //if(curNode.left == null) return parent
+            if(curNode.left == null) return curNode
             return x(curNode.left ?: return parent, curNode, node)
         }
         else if(curNode.key < node.key) {
-            //if(curNode.right == null) return parent
+            if(curNode.right == null) return curNode
             return x(curNode.right ?: return parent, curNode, node)
         }
-        else return curNode
+        else return curNode //Не забыть про этот случай
     }
 }
