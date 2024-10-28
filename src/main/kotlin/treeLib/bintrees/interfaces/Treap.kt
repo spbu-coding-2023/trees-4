@@ -14,7 +14,6 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
 
     fun collectNodes(node: TreapNode<K, V>) {
         subTree.add(node)
-        //Есть ощущения, что то, что снизу, не совсем корректно в плане NULL-SAFETY
         if(node.right != null) node.right?.let{ collectNodes(it) }
         if(node.left != null) node.left?.let{ collectNodes(it) }
     }
@@ -22,67 +21,71 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
     fun buildSubTree(): TreapNode<K, V>? {
         val baum = Treap<K, V>()
         for(node in subTree) baum.add(node.key, node.value)
-        /*baum.root?.let { baum.collectNodes(it) }
-        subTree = baum.subTree  //После такого оно сохранит свойство автоматической сортировки иль як?
-        return subTree.first()*/
         subTree.clear()
         return baum.root()
-        //Может быть можно не собирать массив, а просто взять корень и уже с ним работать?
     }
 
-    internal fun findParent(key: K): TreapNode<K, V>? {
-        var parent = this.root
-        if (root?.key == key) return null
+    fun isThereSuckKey(key: K): TreapNode<K, V>? {
+        var curNode = root
 
-        while (parent != null && (parent.right != null || parent.left != null)) {
-            if (parent.right != null && parent.right?.key == key || parent.left != null && parent.left?.key == key) return parent
-
-            parent = if (key > parent.key) parent.right
-            else parent.left
+        while(curNode != null){
+            curNode.let{
+                if(it.key < key) curNode = it.right
+                else if(it.key > key) curNode = it.left
+                else return curNode
+            }
         }
 
-        return null
+
+        return curNode
     }
 
     override fun remove(key: K): V? {
-        if(root == null) return null
-        if(root?.key == key && amountOfNodes == 1) {
-            amountOfNodes -= 1
-            root = null
-        }
+        val curNode = isThereSuckKey(key) ?: return null
+        var parent: TreapNode<K, V>? = null
+        root?.let { parent = x(it, it, curNode) }
 
-        val parent = this.findParent(key)
         var count = 0
-        val curNode = if (parent?.right != null && parent.right?.key == key) parent.right
-        else parent?.left
-        if(curNode?.left != null) count++
-        if(curNode?.right != null) count++
+        if(curNode.left != null) count++
+        if(curNode.right != null) count++
+
 
         if(count == 0) {
-            if(parent?.right == curNode) parent?.right = null
+            if(curNode == root) root = null
+            else if(parent?.right == curNode) parent?.right = null
             else parent?.left = null
         }
-        if(count == 1) {
-            if(parent?.right == curNode) parent?.right = curNode?.right ?: curNode?.left
-            else parent?.left = curNode?.right ?: curNode?.left
+
+        else if(count == 1) {
+            if(curNode == root) root = root?.right ?: root?.left
+            else if(parent?.right == curNode) parent?.right = curNode.right ?: curNode.left
+            else parent?.left = curNode.right ?: curNode.left
         }
-        if(count == 2) {
-            curNode?.right?.let { collectNodes(it) }
-            curNode?.left?.let { collectNodes(it) }
+
+        else if(count == 2) {
+            curNode.right?.let { collectNodes(it) }
+            curNode.left?.let { collectNodes(it) }
             val result = buildSubTree()
-            if(parent?.right == curNode) parent?.right = result
+            if(curNode == root) root = result
+            else if(parent?.right == curNode) parent?.right = result
             else parent?.left = result
         }
-        return null
+
+
+        return null //Why return anything else?
     }
 
     override fun add(key: K, priority: V): TreapNode<K, V>? {
+        if(isThereSuckKey(key) != null) return null
         val newNode = TreapNode(key, priority)
+
         if(root == null) {
             root = newNode
             amountOfNodes += 1
+
             return root
         }
+
         var parent: TreapNode<K, V>? = null
         root?.let { parent = x(it, it, newNode) }
 
@@ -95,7 +98,8 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
                     it.right = buildSubTree()
                 }
             }
-            else if(it.key > key)( //Не забудь подумать о случае, когда добавленный ключ вже существует
+
+            else if(it.key > key)(
                 if(it.left == null) it.left = newNode
                 else{
                     newNode.left = it.left
@@ -103,6 +107,7 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
                     it.left = buildSubTree()
                 }
             )
+
             else {
                 newNode.right = root
                 collectNodes(newNode)
@@ -110,27 +115,22 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
             }
 
             amountOfNodes += 1
+
             return newNode
         }
+
 
         return root
     }
 
 
     fun x(curNode: TreapNode<K, V>, parent: TreapNode<K, V>, node: TreapNode<K, V>): TreapNode<K, V>{
-        //Добавь ? к возвращаему значению чтоб отработать случаи одинаковости ключа и/иль приоритета
-        if(curNode.value < node.value) {
-            if(curNode == parent) return node
+        if(curNode.value <= node.value) {
+            if(curNode == parent && node != root) return node
             return parent
         }
-        if(curNode.key > node.key) {
-            if(curNode.left == null) return curNode
-            return x(curNode.left ?: return parent, curNode, node)
-        }
-        else if(curNode.key < node.key) {
-            if(curNode.right == null) return curNode
-            return x(curNode.right ?: return parent, curNode, node)
-        }
-        else return curNode //Не забыть про этот случай
+        if(curNode.key > node.key) return x(curNode.left ?: return curNode, curNode, node)
+        else if(curNode.key < node.key) return x(curNode.right ?: return parent, curNode, node)
+        else return curNode
     }
 }

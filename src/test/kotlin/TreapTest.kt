@@ -10,7 +10,7 @@ class TreapTest {
     var baum = Treap<Int, Int>()
 
     @Nested
-    inner class TestindRemoveMethod {
+    inner class TestingRemoveMethod {
 
         @BeforeEach
         fun setUp() {
@@ -78,6 +78,52 @@ class TreapTest {
             assertEquals(TreapNode(70,50), rt?.right?.right?.right)
             assertEquals(TreapNode(60,40), rt?.right?.right?.right?.left)
             assertEquals(TreapNode(80,30), rt?.right?.right?.right?.right)
+        }
+
+        @Test
+        fun removeTheOnlyNode() {
+            baum.clear()
+            baum.add(20, 50)
+            baum.remove(20)
+            assertEquals(null, baum.root())
+        }
+
+        @Test
+        fun removeRootWithOnlyRightChild() {
+            baum.remove(20)
+            assertEquals(TreapNode(50, 90), baum.root())
+        }
+
+        @Test
+        fun removeRootWithOnlyLeftChild() {
+            baum.clear()
+            baum.add(2, 20)
+            baum.add(0, 10)
+            baum.remove(2)
+
+            assertEquals(TreapNode(0, 10), baum.root())
+        }
+
+        @Test
+        fun removeRootWithTwoChildren() {
+            baum.add(10, 95)
+            baum.add(15, 45)
+            baum.add(0, 65)
+            baum.remove(20)
+            val rt = baum.root()
+
+            assertEquals(TreapNode(10, 95), rt)
+            assertEquals(TreapNode(0,65), rt?.left)
+            assertEquals(TreapNode(15,45), rt?.right?.left?.left?.left)
+            assertEquals(TreapNode(50, 90), rt?.right)
+        }
+
+        @Test
+        fun removeReturnNull() {
+            assertEquals(null, baum.remove(20))
+            assertEquals(null, baum.remove(50))
+            assertEquals(null, baum.remove(60))
+            assertEquals(null, baum.remove(70))
         }
     }
 
@@ -158,14 +204,14 @@ class TreapTest {
 
         @Test
         fun changingSubTreesFarFromRoot() {
-            baum.add(20,100)
+            assertEquals(TreapNode(20,100), baum.add(20,100))
             baum.add(50,90)
             baum.add(35,80)
-            baum.add(40,70)
+            assertEquals(TreapNode(40,70), baum.add(40,70))
             baum.add(30,60)
             baum.add(70,50)
             baum.add(60,40)
-            baum.add(80,30)
+            assertEquals(TreapNode(80,30), baum.add(80,30))
             baum.add(32, 85)
             baum.add(75, 65)
 
@@ -180,6 +226,20 @@ class TreapTest {
             assertEquals(TreapNode(80,30), rt?.right?.right?.right)
             assertEquals(TreapNode(70,50), rt?.right?.right?.left)
             assertEquals(TreapNode(60,40), rt?.right?.right?.left?.left)
+        }
+
+        @Test
+        fun addingAlreadyExistingKeys() {
+            baum.add(20,100)
+            baum.add(50,90)
+            baum.add(35,80)
+            baum.add(40,70)
+            baum.add(30,60)
+
+            assertEquals(null, baum.add(35, 80))
+            assertEquals(null, baum.add(35, 40))
+            assertEquals(null, baum.add(20, 100))
+            assertEquals(null, baum.add(30, 80))
         }
     }
 }
