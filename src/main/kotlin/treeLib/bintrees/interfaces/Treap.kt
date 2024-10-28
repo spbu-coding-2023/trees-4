@@ -19,16 +19,14 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
         if(node.left != null) node.left?.let{ collectNodes(it) }
     }
 
-    fun buildSubTree(): TreapNode<K, V> {
-        var baum = Treap<K, V>()
+    fun buildSubTree(): TreapNode<K, V>? {
+        val baum = Treap<K, V>()
         for(node in subTree) baum.add(node.key, node.value)
-        baum.root?.let { baum.collectNodes(it) }
+        /*baum.root?.let { baum.collectNodes(it) }
         subTree = baum.subTree  //После такого оно сохранит свойство автоматической сортировки иль як?
-        return subTree.first()
-        /*
-        subTree.clean()
-        baum.root?.let { return it }
-         */
+        return subTree.first()*/
+        subTree.clear()
+        return baum.root()
         //Может быть можно не собирать массив, а просто взять корень и уже с ним работать?
     }
 
@@ -48,10 +46,10 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
 
     override fun remove(key: K): V? {
         if(root == null) return null
-        /*if(root?.key == key && amountOfNodes == 1) {
+        if(root?.key == key && amountOfNodes == 1) {
             amountOfNodes -= 1
             root = null
-        }*/
+        }
 
         val parent = this.findParent(key)
         var count = 0
@@ -62,7 +60,7 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
 
         if(count == 0) {
             if(parent?.right == curNode) parent?.right = null
-            else parent?.left == null
+            else parent?.left = null
         }
         if(count == 1) {
             if(parent?.right == curNode) parent?.right = curNode?.right ?: curNode?.left
@@ -72,9 +70,8 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
             curNode?.right?.let { collectNodes(it) }
             curNode?.left?.let { collectNodes(it) }
             val result = buildSubTree()
-            if(parent == root) root = result
-            else if(parent?.right == curNode) parent?.right = result
-            else parent?.left == result
+            if(parent?.right == curNode) parent?.right = result
+            else parent?.left = result
         }
         return null
     }
@@ -98,7 +95,7 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
                     it.right = buildSubTree()
                 }
             }
-            else if(it.key < key)( //Не забудь подумать о случае, когда добавленный ключ вже существует
+            else if(it.key > key)( //Не забудь подумать о случае, когда добавленный ключ вже существует
                 if(it.left == null) it.left = newNode
                 else{
                     newNode.left = it.left
@@ -112,8 +109,8 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
                 root = buildSubTree()
             }
 
-                amountOfNodes += 1
-                return newNode
+            amountOfNodes += 1
+            return newNode
         }
 
         return root
@@ -121,6 +118,7 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
 
 
     fun x(curNode: TreapNode<K, V>, parent: TreapNode<K, V>, node: TreapNode<K, V>): TreapNode<K, V>{
+        //Добавь ? к возвращаему значению чтоб отработать случаи одинаковости ключа и/иль приоритета
         if(curNode.value < node.value) {
             if(curNode == parent) return node
             return parent
