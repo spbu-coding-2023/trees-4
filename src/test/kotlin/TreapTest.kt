@@ -1,13 +1,66 @@
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import treeLib.bintrees.BSTree
-import treeLib.bintrees.interfaces.Treap
+import treeLib.bintrees.Treap
 import treeLib.nodes.TreapNode
 import kotlin.test.assertEquals
 
 class TreapTest {
     var baum = Treap<Int, Int>()
+
+    @Nested
+    inner class removingRoots() {
+        @BeforeEach
+        fun setUp() {
+            baum.add(20,100)
+            baum.add(50,90)
+            baum.add(35,80)
+            baum.add(40,70)
+            baum.add(30,60)
+            baum.add(70,50)
+            baum.add(60,40)
+            baum.add(80,30)
+        }
+
+        @Test
+        fun removeTheOnlyNode() {
+            baum.clear()
+            baum.add(20, 50)
+            baum.remove(20)
+            assertEquals(null, baum.root())
+        }
+
+        @Test
+        fun removeRootWithOnlyRightChild() {
+            baum.remove(20)
+            assertEquals(TreapNode(50, 90), baum.root())
+        }
+
+        @Test
+        fun removeRootWithOnlyLeftChild() {
+            baum.clear()
+            baum.add(2, 20)
+            baum.add(0, 10)
+            baum.remove(2)
+
+            assertEquals(TreapNode(0, 10), baum.root())
+        }
+
+        @Test
+        fun removeRootWithTwoChildren() {
+            baum.add(10, 95)
+            baum.add(15, 45)
+            baum.add(0, 65)
+            baum.remove(20)
+            val rt = baum.root()
+
+            assertEquals(TreapNode(10, 95), rt)
+            assertEquals(TreapNode(0,65), rt?.left)
+            assertEquals(TreapNode(15,45), rt?.right?.left?.left?.left)
+            assertEquals(TreapNode(50, 90), rt?.right)
+        }
+
+    }
 
     @Nested
     inner class TestingRemoveMethod {
@@ -80,43 +133,6 @@ class TreapTest {
             assertEquals(TreapNode(80,30), rt?.right?.right?.right?.right)
         }
 
-        @Test
-        fun removeTheOnlyNode() {
-            baum.clear()
-            baum.add(20, 50)
-            baum.remove(20)
-            assertEquals(null, baum.root())
-        }
-
-        @Test
-        fun removeRootWithOnlyRightChild() {
-            baum.remove(20)
-            assertEquals(TreapNode(50, 90), baum.root())
-        }
-
-        @Test
-        fun removeRootWithOnlyLeftChild() {
-            baum.clear()
-            baum.add(2, 20)
-            baum.add(0, 10)
-            baum.remove(2)
-
-            assertEquals(TreapNode(0, 10), baum.root())
-        }
-
-        @Test
-        fun removeRootWithTwoChildren() {
-            baum.add(10, 95)
-            baum.add(15, 45)
-            baum.add(0, 65)
-            baum.remove(20)
-            val rt = baum.root()
-
-            assertEquals(TreapNode(10, 95), rt)
-            assertEquals(TreapNode(0,65), rt?.left)
-            assertEquals(TreapNode(15,45), rt?.right?.left?.left?.left)
-            assertEquals(TreapNode(50, 90), rt?.right)
-        }
 
         @Test
         fun removeReturnNull() {
@@ -127,10 +143,8 @@ class TreapTest {
         }
     }
 
-
     @Nested
-    inner class TestingAddingMethod {
-
+    inner class BSTadding {
         @Test
         fun addingRoot() {
             baum.add(24, 50)
@@ -158,6 +172,11 @@ class TreapTest {
             assertEquals(TreapNode(3,10), rt?.left?.right)
             assertEquals(TreapNode(1,0), rt?.left?.left?.right)
         }
+    }
+
+    @Nested
+    inner class TestingAddingMethod {
+
 
         @Test
         fun changingRootToLeft() {

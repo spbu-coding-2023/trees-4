@@ -1,8 +1,6 @@
-package treeLib.bintrees.interfaces
+package treeLib.bintrees
 
-import treeLib.bintrees.BSTree
 import treeLib.bintrees.interfaces.BinTree
-import treeLib.nodes.BSTNode
 import treeLib.nodes.TreapNode
 import java.util.*
 
@@ -43,7 +41,7 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
     override fun remove(key: K): V? {
         val curNode = isThereSuckKey(key) ?: return null
         var parent: TreapNode<K, V>? = null
-        root?.let { parent = x(it, it, curNode) }
+        root?.let { parent = findParent(it, it, curNode) }
 
         var count = 0
         if(curNode.left != null) count++
@@ -87,7 +85,7 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
         }
 
         var parent: TreapNode<K, V>? = null
-        root?.let { parent = x(it, it, newNode) }
+        root?.let { parent = findParent(it, it, newNode) }
 
         parent?.let{
             if(it.key < key) {
@@ -124,13 +122,14 @@ class Treap<K : Comparable<K>, V: Comparable<V> > : BinTree<K, V, TreapNode<K, V
     }
 
 
-    fun x(curNode: TreapNode<K, V>, parent: TreapNode<K, V>, node: TreapNode<K, V>): TreapNode<K, V>{
+    fun findParent(curNode: TreapNode<K, V>, parent: TreapNode<K, V>, node: TreapNode<K, V>): TreapNode<K, V>{
         if(curNode.value <= node.value) {
             if(curNode == parent && node != root) return node
             return parent
         }
-        if(curNode.key > node.key) return x(curNode.left ?: return curNode, curNode, node)
-        else if(curNode.key < node.key) return x(curNode.right ?: return parent, curNode, node)
+
+        if(curNode.key > node.key) return findParent(curNode.left ?: return curNode, curNode, node)
+        else if(curNode.key < node.key) return findParent(curNode.right ?: return parent, curNode, node)
         else return curNode
     }
 }
